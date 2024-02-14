@@ -31,6 +31,22 @@ fun Navigation(
     paddingValues: PaddingValues,
     snackbarHostState: SnackbarHostState
 ) {
+    val slideIn = slideInHorizontally(
+        initialOffsetX = { -300 },
+        animationSpec = tween(
+            durationMillis = 300,
+            easing = FastOutSlowInEasing
+        )
+    ) + fadeIn(animationSpec = tween(300))
+
+    val slideOut = slideOutHorizontally(
+        targetOffsetX = { -300 },
+        animationSpec = tween(
+            durationMillis = 300,
+            easing = FastOutSlowInEasing
+        )
+    ) + fadeOut(animationSpec = tween(300))
+
     AnimatedNavHost(
         navController = navController,
         startDestination = Screen.LoginScreen.route,
@@ -38,193 +54,57 @@ fun Navigation(
     ) {
         composable(
             route = Screen.LoginScreen.route,
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeOut(animationSpec = tween(300))
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeIn(animationSpec = tween(300))
-            }
-
+            exitTransition = { slideOut },
+            popEnterTransition = { slideIn }
         ) {
             LoginScreen(navController = navController)
         }
         composable(
             route = Screen.HomeScreen.route,
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeOut(animationSpec = tween(300))
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeIn(animationSpec = tween(300))
-            }
-
+            exitTransition = { slideOut },
+            popEnterTransition = { slideIn }
         ) {
             HomeScreen(navController = navController)
         }
         composable(
             route = Screen.CatalogScreen.route,
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeOut(animationSpec = tween(300))
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeIn(animationSpec = tween(300))
-            }
-
+            exitTransition = { slideOut },
+            popEnterTransition = { slideIn }
         ) {
             CatalogScreen(navController = navController)
         }
         composable(
             route = Screen.CartScreen.route,
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeOut(animationSpec = tween(300))
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeIn(animationSpec = tween(300))
-            }
-
+            exitTransition = { slideOut },
+            popEnterTransition = { slideIn }
         ) {
             CartScreen(navController = navController)
         }
         composable(
             route = Screen.DiscountScreen.route,
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeOut(animationSpec = tween(300))
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeIn(animationSpec = tween(300))
-            }
-
+            exitTransition = { slideOut },
+            popEnterTransition = { slideIn }
         ) {
             DiscountScreen(navController = navController)
         }
         composable(
             route = Screen.AccountScreen.route,
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeOut(animationSpec = tween(300))
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeIn(animationSpec = tween(300))
-            }
-
+            exitTransition = { slideOut },
+            popEnterTransition = { slideIn }
         ) {
             AccountScreen(navController = navController)
         }
         composable(
             route = Screen.FavouritesScreen.route,
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeOut(animationSpec = tween(300))
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeIn(animationSpec = tween(300))
-            }
-
+            exitTransition = { slideOut },
+            popEnterTransition = { slideIn }
         ) {
             FavouritesScreen(navController = navController)
         }
         composable(
             route = Screen.ProductScreen.route,
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeOut(animationSpec = tween(300))
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { -300 },
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + fadeIn(animationSpec = tween(300))
-            }
-
+            exitTransition = { slideOut },
+            popEnterTransition = { slideIn }
         ) {
             ProductScreen(navController = navController)
         }

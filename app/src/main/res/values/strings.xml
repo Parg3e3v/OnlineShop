@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Tz_effective</string>
+    <string name="name">Имя</string>
+    <string name="surname">Фамилия</string>
+    <string name="phone">Номер телефона</string>
+    <string name="message">Нажимая кнопку \"Войти\", Вы принимаете\n <u>условия программы лояльности</u></string>
+    <string name="login">Войти</string>
 </resources>
