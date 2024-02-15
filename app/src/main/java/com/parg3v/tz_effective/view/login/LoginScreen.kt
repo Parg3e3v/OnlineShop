@@ -40,13 +40,13 @@ fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), navController: NavC
 
     LoginScreenUI(
         controller = navController,
-        name = name,
+        nameProvider = { name },
         validName = validName,
         nameInputChange = viewModel::validateName,
-        surname = surname,
+        surnameProvider = { surname },
         validSurname = validSurname,
         surnameInputChange = viewModel::validateSurname,
-        phone = phone,
+        phoneProvider = { phone },
         validPhone = validPhone,
         phoneInputChange = viewModel::validatePhone
     )
@@ -55,13 +55,13 @@ fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), navController: NavC
 @Composable
 fun LoginScreenUI(
     controller: NavController,
-    name: String,
+    nameProvider: () -> String,
     nameInputChange: (String) -> Unit,
     validName: Boolean,
-    surname: String,
+    surnameProvider: () -> String,
     surnameInputChange: (String) -> Unit,
     validSurname: Boolean,
-    phone: String,
+    phoneProvider: () -> String,
     phoneInputChange: (String) -> Unit,
     validPhone: Boolean
 ) {
@@ -77,9 +77,9 @@ fun LoginScreenUI(
         )
         {
             CustomOutlinedTextField(
-                value = name,
-                onValueChange = { nameInputChange(it) },
-                isError = if(name.isNotBlank()) !validName else false,
+                value = nameProvider,
+                onValueChange = nameInputChange,
+                isError = if (nameProvider().isNotBlank()) !validName else false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = dimensionResource(id = R.dimen.padding_login)),
@@ -87,9 +87,9 @@ fun LoginScreenUI(
             )
 
             CustomOutlinedTextField(
-                value = surname,
-                onValueChange = { surnameInputChange(it) },
-                isError = if(surname.isNotBlank()) !validSurname else false,
+                value = surnameProvider,
+                onValueChange = surnameInputChange,
+                isError = if (surnameProvider().isNotBlank()) !validSurname else false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = dimensionResource(id = R.dimen.padding_login)),
@@ -97,7 +97,7 @@ fun LoginScreenUI(
             )
 
             PhoneNumberTextField(
-                value = phone,
+                valueProvider = phoneProvider,
                 onValueChange = phoneInputChange,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -125,5 +125,4 @@ fun LoginScreenUI(
             color = Grey
         )
     }
-
 }

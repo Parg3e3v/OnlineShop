@@ -6,7 +6,7 @@
     <string name="message">Нажимая кнопку \"Войти\", Вы принимаете\n <u>условия программы лояльности</u></string>
     <string name="login">Войти</string>
     <string name="phone_number">Номер телефона</string>
-    <string name="phone_mask">xxx-xxx-xx-xx</string>
+    <string name="phone_mask">+7 xxx-xxx-xx-xx</string>
     <string name="favourites">Избранное</string>
     <string name="shops">Магазины</string>
     <string name="feedback">Обратная связь</string>

@@ -22,7 +22,7 @@ import com.parg3v.tz_effective.ui.theme.LightGrey
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomOutlinedTextField(
-    value: String,
+    value: () -> String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeholder: @Composable (() -> Unit)? = null,
@@ -45,7 +45,7 @@ fun CustomOutlinedTextField(
     }
 
     OutlinedTextField(
-        value = value,
+        value = value(),
         onValueChange = { onValueChange(it) },
         modifier = modifier.aspectRatio(6.8F),
         singleLine = true,
@@ -59,7 +59,7 @@ fun CustomOutlinedTextField(
         placeholder = placeholder,
         keyboardOptions = keyboardOptions,
         visualTransformation = visualTransformation,
-        trailingIcon = if (value.isNotBlank()) trailingIconView else null,
+        trailingIcon = if (value().isNotBlank()) trailingIconView else null,
         isError = isError
     )
 }
@@ -67,6 +67,6 @@ fun CustomOutlinedTextField(
 @Preview
 @Composable
 fun CustomOutlinedTextFieldPreview() {
-    CustomOutlinedTextField(value = "", onValueChange = {})
+    CustomOutlinedTextField(value = { "" }, onValueChange = {})
 }
 

@@ -22,7 +22,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import com.parg3v.tz_effective.R
 import com.parg3v.tz_effective.ui.theme.Grey
 import com.parg3v.tz_effective.ui.theme.LightGrey
@@ -30,7 +30,7 @@ import com.parg3v.tz_effective.ui.theme.LightGrey
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhoneNumberTextField(
-    value: String,
+    valueProvider: () -> String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -42,7 +42,7 @@ fun PhoneNumberTextField(
     }
 
     OutlinedTextField(
-        value = value,
+        value = valueProvider(),
         onValueChange = { onValueChange(it) },
         modifier = modifier
             .aspectRatio(6.8F)
@@ -51,7 +51,9 @@ fun PhoneNumberTextField(
         shape = RoundedCornerShape(percent = integerResource(id = R.integer.ui_round_percentage)),
         placeholder = { Text(placeholder) },
         visualTransformation = {
-            if (it.isBlank()) {
+            if (it.isBlank() && isFocused) {
+                phoneNumberInputFormatter(it)
+            } else if (it.isBlank()) {
                 TransformedText(it, OffsetMapping.Identity)
             } else {
                 phoneNumberInputFormatter(it)
@@ -63,24 +65,17 @@ fun PhoneNumberTextField(
             containerColor = LightGrey,
             focusedBorderColor = Color.Transparent,
             unfocusedBorderColor = Color.Transparent
-        ),
-        leadingIcon =
-        {
-            Text(
-                text = "+7",
-                textAlign = TextAlign.End
-            )
-        }
+        )
     )
 }
 
 private fun phoneNumberInputFormatter(text: AnnotatedString): TransformedText {
-
-    val mask = "xxx-xxx-xx-xx"
+    val mask = "+7 xxx-xxx-xx-xx"
 
     val trimmed = if (text.text.length >= 10) text.text.substring(0..9) else text.text
 
     val annotatedString = AnnotatedString.Builder().run {
+        append("+7 ")
         for (i in trimmed.indices) {
             append(trimmed[i])
             if (i == 2 || i == 5 || i == 7) {
@@ -95,11 +90,11 @@ private fun phoneNumberInputFormatter(text: AnnotatedString): TransformedText {
     val phoneNumberOffsetTranslator = object : OffsetMapping {
         override fun originalToTransformed(offset: Int): Int {
             return when {
-                offset == 0 -> return 0
-                offset <= 3 -> offset
-                offset <= 6 -> offset + 1
-                offset <= 8 -> offset + 2
-                else -> offset + 3
+                offset == 0 -> return 3
+                offset <= 3 -> offset + 3
+                offset <= 6 -> offset + 4
+                offset <= 8 -> offset + 5
+                else -> offset + 6
             }
         }
 
@@ -108,4 +103,10 @@ private fun phoneNumberInputFormatter(text: AnnotatedString): TransformedText {
         }
     }
     return TransformedText(annotatedString, phoneNumberOffsetTranslator)
+}
+
+@Preview
+@Composable
+fun PhoneFieldPreview() {
+    PhoneNumberTextField(valueProvider = { "1234567890" }, onValueChange = {})
 }
