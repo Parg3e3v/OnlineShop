@@ -2,4 +2,6 @@
 <resources>
     <dimen name="padding_login">16dp</dimen>
     <dimen name="padding_login_top">130dp</dimen>
+    <dimen name="padding_account_button">8dp</dimen>
+    <dimen name="padding_account_button_title_horizontal">16dp</dimen>
 </resources>

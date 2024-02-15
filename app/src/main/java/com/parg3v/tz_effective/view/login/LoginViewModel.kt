@@ -2,6 +2,7 @@ package com.parg3v.tz_effective.view.login
 
 import androidx.lifecycle.ViewModel
 import com.parg3v.domain.use_cases.ValidateNameUseCase
+import com.parg3v.domain.use_cases.ValidatePhoneUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,7 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val validateNameUseCase: ValidateNameUseCase
+    private val validateNameUseCase: ValidateNameUseCase,
+    private val validatePhoneUseCase: ValidatePhoneUseCase
 ) : ViewModel() {
 
     private val _nameState = MutableStateFlow("")
@@ -23,18 +25,28 @@ class LoginViewModel @Inject constructor(
     private val _phoneState = MutableStateFlow("")
     val phoneState: StateFlow<String> = _phoneState.asStateFlow()
 
-    fun validateName(input: String): Boolean = if (validateNameUseCase(input)) {
+    private val _validNameState = MutableStateFlow(false)
+    val validNameState: StateFlow<Boolean> = _validNameState.asStateFlow()
+
+    private val _validSurnameState = MutableStateFlow(false)
+    val validSurnameState: StateFlow<Boolean> = _validSurnameState.asStateFlow()
+
+    private val _validPhoneState = MutableStateFlow(false)
+    val validPhoneState: StateFlow<Boolean> = _validPhoneState.asStateFlow()
+
+    fun validateName(input: String) {
         _nameState.update { input }
-        true
-    } else false
+        _validNameState.update { validateNameUseCase(input) && input.isNotBlank() }
+    }
 
-    fun validateSurname(input: String): Boolean = if (validateNameUseCase(input)) {
+    fun validateSurname(input: String) {
         _surnameState.update { input }
-        true
-    } else false
+        _validSurnameState.update { validateNameUseCase(input) && input.isNotBlank() }
+    }
 
-    fun validatePhone(input: String): Boolean = if (input.length <= 10) {
-        _phoneState.update { input }
-        true
-    } else false
+    fun validatePhone(input: String) {
+        if (validatePhoneUseCase(input))
+            _phoneState.update { input }
+        _validPhoneState.update { _phoneState.value.length == 10 }
+    }
 }

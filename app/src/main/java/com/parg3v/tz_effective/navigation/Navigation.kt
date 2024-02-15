@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
+import com.parg3v.tz_effective.R
 import com.parg3v.tz_effective.view.account.AccountScreen
 import com.parg3v.tz_effective.view.cart.CartScreen
 import com.parg3v.tz_effective.view.catalog.CatalogScreen
@@ -51,6 +53,7 @@ fun Navigation(
         navController = navController,
         startDestination = Screen.LoginScreen.route,
         modifier = Modifier.padding(paddingValues)
+            .padding(horizontal = dimensionResource(id = R.dimen.padding_login))
     ) {
         composable(
             route = Screen.LoginScreen.route,

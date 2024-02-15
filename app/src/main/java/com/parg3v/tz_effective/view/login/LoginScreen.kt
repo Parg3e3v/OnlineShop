@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,14 +34,20 @@ fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), navController: NavC
     val name by viewModel.nameState.collectAsStateWithLifecycle()
     val surname by viewModel.surnameState.collectAsStateWithLifecycle()
     val phone by viewModel.phoneState.collectAsStateWithLifecycle()
+    val validName by viewModel.validNameState.collectAsStateWithLifecycle()
+    val validSurname by viewModel.validSurnameState.collectAsStateWithLifecycle()
+    val validPhone by viewModel.validPhoneState.collectAsStateWithLifecycle()
 
     LoginScreenUI(
         controller = navController,
         name = name,
+        validName = validName,
         nameInputChange = viewModel::validateName,
         surname = surname,
+        validSurname = validSurname,
         surnameInputChange = viewModel::validateSurname,
         phone = phone,
+        validPhone = validPhone,
         phoneInputChange = viewModel::validatePhone
     )
 }
@@ -50,26 +57,29 @@ fun LoginScreenUI(
     controller: NavController,
     name: String,
     nameInputChange: (String) -> Unit,
+    validName: Boolean,
     surname: String,
     surnameInputChange: (String) -> Unit,
+    validSurname: Boolean,
     phone: String,
-    phoneInputChange: (String) -> Unit
+    phoneInputChange: (String) -> Unit,
+    validPhone: Boolean
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(dimensionResource(id = R.dimen.padding_login))
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
-                .padding(top = dimensionResource(id = R.dimen.padding_login_top)),
-
-            ) {
+                .padding(top = dimensionResource(id = R.dimen.padding_login_top))
+        )
+        {
             CustomOutlinedTextField(
                 value = name,
                 onValueChange = { nameInputChange(it) },
+                isError = if(name.isNotBlank()) !validName else false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = dimensionResource(id = R.dimen.padding_login)),
@@ -79,13 +89,16 @@ fun LoginScreenUI(
             CustomOutlinedTextField(
                 value = surname,
                 onValueChange = { surnameInputChange(it) },
+                isError = if(surname.isNotBlank()) !validSurname else false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = dimensionResource(id = R.dimen.padding_login)),
                 placeholder = { Text(text = stringResource(R.string.surname)) }
             )
+
             PhoneNumberTextField(
-                value = phone, onValueChange = phoneInputChange,
+                value = phone,
+                onValueChange = phoneInputChange,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = dimensionResource(id = R.dimen.padding_login))
@@ -93,9 +106,11 @@ fun LoginScreenUI(
 
             Button(
                 onClick = { controller.navigate(Screen.HomeScreen.route) },
+                enabled = listOf(validName, validSurname, validPhone).all { it },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(disabledContainerColor = MaterialTheme.colorScheme.secondary),
-                shape = RoundedCornerShape(20)
+                colors = ButtonDefaults.buttonColors(
+                    disabledContainerColor = MaterialTheme.colorScheme.secondary),
+                shape = RoundedCornerShape(integerResource(id = R.integer.ui_round_percentage))
             ) {
                 Text(text = stringResource(R.string.login), color = Color.White)
             }
