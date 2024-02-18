@@ -4,12 +4,12 @@ data class ProductModel (
     val id: String,
     val title: String,
     val subtitle: String,
-    val priceModel: PriceModel,
-    val feedbackModel: FeedbackModel,
+    val price: PriceModel,
+    val feedback: FeedbackModel,
     val tags: List<String>,
     val available: Int,
     val description: String,
-    val infoModel: List<InfoModel>,
+    val info: List<InfoModel>,
     val ingredients: String
 )
 

@@ -16,36 +16,60 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.parg3v.tz_effective.R
 import com.parg3v.tz_effective.components.ProductItem
+import com.parg3v.tz_effective.components.ProductItemPlaceholder
+import com.parg3v.tz_effective.components.Shimmer
 import com.parg3v.tz_effective.model.ProductsListState
 
 @Composable
 fun CatalogScreen(viewModel: CatalogViewModel = hiltViewModel(), navController: NavController) {
 
     val itemsList by viewModel.productsState.collectAsStateWithLifecycle()
-
+    val imageSlider = listOf(
+        painterResource(id = R.drawable.img_54a876a5_2205_48ba_9498_cfecff4baa6e_1),
+        painterResource(id = R.drawable.img_54a876a5_2205_48ba_9498_cfecff4baa6e_1),
+        painterResource(id = R.drawable.img_54a876a5_2205_48ba_9498_cfecff4baa6e_1)
+    )
     CatalogScreenUI(
-        controller = navController,
-        itemsList = itemsList
+        controller = navController, itemsListState = itemsList
     )
 }
 
 @Composable
-fun CatalogScreenUI(controller: NavController, itemsList: ProductsListState) {
+fun CatalogScreenUI(controller: NavController, itemsListState: ProductsListState) {
     Box(modifier = Modifier.fillMaxSize()) {
 
-        if (itemsList.error.isEmpty())
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(7.dp),
-                horizontalArrangement = Arrangement.spacedBy(7.dp)
-            ) {
-                items(itemsList.data) { product ->
-                    ProductItem(
-                        painter = painterResource(id = R.drawable.img_54a876a5_2205_48ba_9498_cfecff4baa6e_1),
-                        product = product
-                    )
+        if (itemsListState.error.isEmpty())
+
+
+            Shimmer(isLoading = itemsListState.isLoading, contentAfterLoading = {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(7.dp),
+                    horizontalArrangement = Arrangement.spacedBy(7.dp)
+                ) {
+                    items(itemsListState.data) { product ->
+                        ProductItem(
+                            images = listOf(
+                                painterResource(id = R.drawable.img_54a876a5_2205_48ba_9498_cfecff4baa6e_1),
+                                painterResource(id = R.drawable.img_54a876a5_2205_48ba_9498_cfecff4baa6e_1),
+                                painterResource(id = R.drawable.img_54a876a5_2205_48ba_9498_cfecff4baa6e_1),
+                                painterResource(id = R.drawable.img_54a876a5_2205_48ba_9498_cfecff4baa6e_1)
+                            ), product = product
+                        )
+                    }
                 }
-            }
+            }, loadingComposable = {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(7.dp),
+                    horizontalArrangement = Arrangement.spacedBy(7.dp)
+                ) {
+                    items(8) {
+                        ProductItemPlaceholder()
+                    }
+                }
+            })
     }
 }

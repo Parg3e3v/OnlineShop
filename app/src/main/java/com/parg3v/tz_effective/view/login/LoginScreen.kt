@@ -27,6 +27,7 @@ import com.parg3v.tz_effective.components.CustomOutlinedTextField
 import com.parg3v.tz_effective.components.PhoneNumberTextField
 import com.parg3v.tz_effective.navigation.Screen
 import com.parg3v.tz_effective.ui.theme.Grey
+import com.parg3v.tz_effective.ui.theme.Typography
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), navController: NavController) {
@@ -119,10 +120,11 @@ fun LoginScreenUI(
         Text(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(bottom = dimensionResource(id = R.dimen.login_message_padidng)),
             text = stringResource(R.string.message),
             textAlign = TextAlign.Center,
-            color = Grey
+            style = Typography.displaySmall.copy(color = Grey)
         )
     }
 }

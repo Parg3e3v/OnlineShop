@@ -13,30 +13,23 @@ fun ProductModel.toProduct(): Product = Product(
     id = id,
     title = title,
     subtitle = subtitle,
-    price = priceModel.toPrice(),
-    feedback = feedbackModel.toFeedback(),
+    price = price.toPrice(),
+    feedback = feedback.toFeedback(),
     tags = tags,
     available = available,
     description = description,
-    info = infoModel.toInfo(),
+    info = info.toInfo(),
     ingredients = ingredients
 )
 
-fun PriceModel?.toPrice(): Price? =
-    this?.let {
-        return Price(
-            price = price,
-            discount = discount,
-            priceWithDiscount = priceWithDiscount,
-            unit = unit
-        )
-    }
+fun PriceModel.toPrice(): Price = Price(
+    price = price,
+    discount = discount,
+    priceWithDiscount = priceWithDiscount,
+    unit = unit
+)
 
 
-fun FeedbackModel?.toFeedback(): Feedback? =
-    this?.let {
-        Feedback(count = count, rating = rating)
-    }
+fun FeedbackModel.toFeedback(): Feedback = Feedback(count = count, rating = rating)
 
-fun List<InfoModel>?.toInfo(): List<Info>? =
-    this?.let { list -> list.map { Info(title = it.title, value = it.value) } }
+fun List<InfoModel>.toInfo(): List<Info> = this.map { Info(title = it.title, value = it.value) }

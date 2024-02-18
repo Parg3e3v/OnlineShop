@@ -12,4 +12,5 @@
     <string name="feedback">Обратная связь</string>
     <string name="offer">Оферта</string>
     <string name="refund">Возврат товара</string>
+    <string name="text_loading">Обработка данных</string>
 </resources>

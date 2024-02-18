@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.parg3v.tz_effective.R
 import com.parg3v.tz_effective.ui.theme.Grey
 import com.parg3v.tz_effective.ui.theme.LightGrey
+import com.parg3v.tz_effective.ui.theme.Typography
 
 @Composable
 fun AccountMenuButton(
@@ -53,9 +53,9 @@ fun AccountMenuButton(
                 .weight(1F)
                 .padding(start = dimensionResource(id = R.dimen.padding_account_button_title_horizontal))
         ) {
-            Text(text = title, style = MaterialTheme.typography.titleMedium)
+            Text(text = title, style = Typography.titleMedium)
             content?.let {
-                Text(text = content, style = MaterialTheme.typography.bodySmall, color = Grey)
+                Text(text = content, style = Typography.bodySmall, color = Grey)
             }
         }
         IconButton(

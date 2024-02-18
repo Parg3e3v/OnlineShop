@@ -1,6 +1,5 @@
 package com.parg3v.tz_effective.view.catalog
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.parg3v.domain.common.ResultOf
@@ -30,16 +29,7 @@ class CatalogViewModel @Inject constructor(
         getProductsUseCase().onEach { result ->
             when (result) {
                 is ResultOf.Success<*> -> {
-                    result.data?.let { products ->
-                        products.forEach {
-                            Log.d(
-                                "ViewModel",
-                                it.toString()
-                            )
-                        }
-                    }
-                    _productsState.value =
-                        ProductsListState(data = result.data.orEmpty())
+                    _productsState.value = ProductsListState(data = result.data.orEmpty())
                 }
 
                 is ResultOf.Failure -> {
