@@ -12,4 +12,7 @@
     <dimen name="padding_product_item_rating">2dp</dimen>
     <dimen name="padding_pager_indicator">2dp</dimen>
     <dimen name="pager_indicator_size">4dp</dimen>
+    <dimen name="padding_catalog_items_top">15dp</dimen>
+    <dimen name="padding_catalog_menu_between">8dp</dimen>
+    <dimen name="arrangement_catalog_items">7dp</dimen>
 </resources>

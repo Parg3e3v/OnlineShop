@@ -2,6 +2,9 @@ package com.parg3v.domain.module
 
 import com.parg3v.domain.repository.ProductsRepository
 import com.parg3v.domain.use_cases.GetProductsUseCase
+import com.parg3v.domain.use_cases.SortProductsByPopularityUseCase
+import com.parg3v.domain.use_cases.SortProductsByPriceToMaxUseCase
+import com.parg3v.domain.use_cases.SortProductsByPriceToMinUseCase
 import com.parg3v.domain.use_cases.ValidateNameUseCase
 import com.parg3v.domain.use_cases.ValidatePhoneUseCase
 import dagger.Module
@@ -29,5 +32,23 @@ object ProductsModule {
     @Singleton
     fun provideValidatePhoneUseCase(): ValidatePhoneUseCase{
         return ValidatePhoneUseCase()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSortProductsByPopularityUseCase(): SortProductsByPopularityUseCase{
+        return SortProductsByPopularityUseCase()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSortProductsByPriceToMaxUseCase(): SortProductsByPriceToMaxUseCase{
+        return SortProductsByPriceToMaxUseCase()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSortProductsByPriceToMinUseCase(): SortProductsByPriceToMinUseCase{
+        return SortProductsByPriceToMinUseCase()
     }
 }

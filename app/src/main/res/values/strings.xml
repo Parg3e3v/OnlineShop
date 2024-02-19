@@ -13,4 +13,8 @@
     <string name="offer">Оферта</string>
     <string name="refund">Возврат товара</string>
     <string name="text_loading">Обработка данных</string>
+    <string name="by_popularity">По популярности</string>
+    <string name="by_price_to_min">По уменьшению цены</string>
+    <string name="by_price_to_max">По возрастанию цены</string>
+    <string name="filters">Фильтры</string>
 </resources>

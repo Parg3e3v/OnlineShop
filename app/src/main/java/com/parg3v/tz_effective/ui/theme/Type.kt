@@ -19,6 +19,10 @@ val Typography = Typography(
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp
     ),
+    displayMedium = TextStyle(
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp
+    ),
     titleSmall = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 9.sp
