@@ -27,7 +27,11 @@ import com.parg3v.tz_effective.ui.theme.Typography
 import kotlinx.coroutines.launch
 
 @Composable
-fun SortingDropdown(sortingMethod: (SortType) -> Unit, listState: LazyGridState) {
+fun SortingDropdown(
+    sortingMethod: (SortType) -> Unit,
+    listState: LazyGridState,
+    clickable: Boolean
+) {
 
     val showMenu = remember { mutableStateOf(false) }
     val sortingType = remember { mutableStateOf(R.string.by_popularity) }
@@ -37,7 +41,7 @@ fun SortingDropdown(sortingMethod: (SortType) -> Unit, listState: LazyGridState)
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_catalog_menu_between)),
-            modifier = Modifier.clickable { showMenu.value = !showMenu.value }
+            modifier = if (clickable) Modifier.clickable { showMenu.value = !showMenu.value } else Modifier
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_sort),

@@ -62,7 +62,7 @@ fun CatalogScreenUI(
 
         if (itemsListState.error.isEmpty()) {
             Row {
-                SortingDropdown(sortingMethod, listState)
+                SortingDropdown(sortingMethod, listState, !itemsListState.isLoading)
                 Spacer(modifier = Modifier.weight(1F))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
