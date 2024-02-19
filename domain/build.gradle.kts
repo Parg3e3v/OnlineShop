@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
+    id("org.jetbrains.kotlin.plugin.serialization")
     kotlin("kapt")
 }
 
@@ -48,4 +49,10 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.49")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0-rc01")
+
+
+    //Data Store
+    implementation ("androidx.datastore:datastore:1.0.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+
 }
