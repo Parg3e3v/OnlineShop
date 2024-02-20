@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -16,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.integerResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -39,6 +42,19 @@ fun PhoneNumberTextField(
         stringResource(R.string.phone_mask)
     } else {
         stringResource(R.string.phone_number)
+    }
+
+    val trailingIconView = @Composable {
+        IconButton(
+            onClick = {
+                onValueChange("")
+            },
+        ) {
+            Icon(
+                painterResource(id = R.drawable.icon_clear),
+                contentDescription = ""
+            )
+        }
     }
 
     OutlinedTextField(
@@ -65,7 +81,8 @@ fun PhoneNumberTextField(
             containerColor = LightGrey,
             focusedBorderColor = Color.Transparent,
             unfocusedBorderColor = Color.Transparent
-        )
+        ),
+        trailingIcon = if (valueProvider().isNotBlank()) trailingIconView else null
     )
 }
 

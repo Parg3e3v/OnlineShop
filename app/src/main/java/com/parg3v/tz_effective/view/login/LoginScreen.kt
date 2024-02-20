@@ -22,7 +22,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -150,7 +154,12 @@ fun LoginScreenUI(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .padding(bottom = dimensionResource(id = R.dimen.login_message_padidng)),
-            text = stringResource(R.string.message),
+            text = buildAnnotatedString {
+                append(stringResource(R.string.message) + "\n")
+                withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline)) {
+                    append(stringResource(R.string.message_underlined))
+                }
+            },
             textAlign = TextAlign.Center,
             style = Typography.displaySmall.copy(color = Grey)
         )

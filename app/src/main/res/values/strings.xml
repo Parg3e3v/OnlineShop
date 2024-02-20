@@ -3,7 +3,8 @@
     <string name="name">Имя</string>
     <string name="surname">Фамилия</string>
     <string name="phone">Номер телефона</string>
-    <string name="message">Нажимая кнопку \"Войти\", Вы принимаете\n <u>условия программы лояльности</u></string>
+    <string name="message">Нажимая кнопку \"Войти\", Вы принимаете</string>
+    <string name="message_underlined">условия программы лояльности</string>
     <string name="login">Войти</string>
     <string name="phone_number">Номер телефона</string>
     <string name="phone_mask">+7 xxx-xxx-xx-xx</string>
