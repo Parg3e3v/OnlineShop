@@ -3,6 +3,7 @@ package com.parg3v.tz_effective.view.catalog
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.parg3v.domain.common.ResultOf
+import com.parg3v.domain.use_cases.ContainsTagUseCase
 import com.parg3v.domain.use_cases.GetProductsUseCase
 import com.parg3v.domain.use_cases.SortProductsByPopularityUseCase
 import com.parg3v.domain.use_cases.SortProductsByPriceToMaxUseCase
@@ -22,11 +23,18 @@ class CatalogViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
     private val sortProductsByPopularityUseCase: SortProductsByPopularityUseCase,
     private val sortProductsByPriceToMinUseCase: SortProductsByPriceToMinUseCase,
-    private val sortProductsByPriceToMaxUseCase: SortProductsByPriceToMaxUseCase
+    private val sortProductsByPriceToMaxUseCase: SortProductsByPriceToMaxUseCase,
+    private val containsTagUseCase: ContainsTagUseCase
 ) : ViewModel() {
 
     private val _productsState = MutableStateFlow(ProductsListState())
     val productsState: StateFlow<ProductsListState> = _productsState.asStateFlow()
+
+    private val _filteredProductsState = MutableStateFlow(ProductsListState())
+    val filteredProductsState: StateFlow<ProductsListState> = _filteredProductsState.asStateFlow()
+
+    private val _selectedOption = MutableStateFlow("all")
+    val selectedOption: StateFlow<String> = _selectedOption.asStateFlow()
 
     init {
         getProducts()
@@ -40,36 +48,54 @@ class CatalogViewModel @Inject constructor(
                 }
 
                 is ResultOf.Failure -> {
-                    _productsState.value =
-                        ProductsListState(
-                            error = result.message ?: "Unexpected Error"
-                        )
+                    _productsState.value = ProductsListState(
+                        error = result.message ?: "Unexpected Error"
+                    )
                 }
 
                 is ResultOf.Loading -> {
-                    _productsState.value =
-                        ProductsListState(isLoading = true)
+                    _productsState.value = ProductsListState(isLoading = true)
                 }
             }
         }.launchIn(viewModelScope)
     }
 
     fun sortBy(field: SortType) {
-        when (field) {
-            SortType.POPULARITY -> {
-                _productsState.value =
+
+        if (_selectedOption.value == "all") {
+            _productsState.value = when (field) {
+                SortType.POPULARITY -> {
                     ProductsListState(data = sortProductsByPopularityUseCase(_productsState.value.data))
-            }
+                }
 
-            SortType.PRICE_TO_MAX -> {
-                _productsState.value =
+                SortType.PRICE_TO_MAX -> {
                     ProductsListState(data = sortProductsByPriceToMaxUseCase(_productsState.value.data))
-            }
+                }
 
-            SortType.PRICE_TO_MIN -> {
-                _productsState.value =
+                SortType.PRICE_TO_MIN -> {
                     ProductsListState(data = sortProductsByPriceToMinUseCase(_productsState.value.data))
+                }
+            }
+        } else {
+            _filteredProductsState.value = when (field) {
+                SortType.POPULARITY -> {
+                    ProductsListState(data = sortProductsByPopularityUseCase(_filteredProductsState.value.data))
+                }
+
+                SortType.PRICE_TO_MAX -> {
+                    ProductsListState(data = sortProductsByPriceToMaxUseCase(_filteredProductsState.value.data))
+                }
+
+                SortType.PRICE_TO_MIN -> {
+                    ProductsListState(data = sortProductsByPriceToMinUseCase(_filteredProductsState.value.data))
+                }
             }
         }
+    }
+
+    fun containsTag(tag: String) {
+        _filteredProductsState.value =
+            ProductsListState(data = containsTagUseCase(_productsState.value.data, tag))
+        _selectedOption.value = tag
     }
 }

@@ -18,4 +18,9 @@
     <string name="by_price_to_min">По уменьшению цены</string>
     <string name="by_price_to_max">По возрастанию цены</string>
     <string name="filters">Фильтры</string>
+    <string name="see_all">Смотреть все</string>
+    <string name="face">Лицо</string>
+    <string name="body">Тело</string>
+    <string name="suntan">Загар</string>
+    <string name="masks">Маски</string>
 </resources>

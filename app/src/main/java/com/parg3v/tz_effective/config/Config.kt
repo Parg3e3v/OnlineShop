@@ -14,4 +14,11 @@ object Config {
         "88f88865-ae74-4b7c-9d81-b78334bb97db" to listOf(R.drawable.img_4271, R.drawable.img_415272),
         "55f58865-ae74-4b7c-9d81-b78334bb97db" to listOf(R.drawable.img_216281, R.drawable.img_123182)
     )
+    val TAGS: Map<String, Int> = mapOf(
+        "all" to R.string.see_all,
+        "face" to R.string.face,
+        "body" to R.string.body,
+        "suntan" to R.string.suntan,
+        "mask" to R.string.masks
+    )
 }

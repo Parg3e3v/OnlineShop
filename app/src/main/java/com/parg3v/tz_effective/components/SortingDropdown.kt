@@ -30,11 +30,11 @@ import kotlinx.coroutines.launch
 fun SortingDropdown(
     sortingMethod: (SortType) -> Unit,
     listState: LazyGridState,
-    clickable: Boolean
+    clickable: Boolean,
+    sortingType: MutableState<Int>
 ) {
 
     val showMenu = remember { mutableStateOf(false) }
-    val sortingType = remember { mutableStateOf(R.string.by_popularity) }
     val scope = rememberCoroutineScope()
 
     Column {
@@ -115,10 +115,10 @@ fun SortingDropdown(
     }
 }
 
-private suspend fun sortItemsBy(
+suspend fun sortItemsBy(
     sortBy: SortType,
     sortingTypeId: MutableState<Int>,
-    showMenu: MutableState<Boolean>,
+    showMenu: MutableState<Boolean> = mutableStateOf(false),
     sortingMethod: (SortType) -> Unit,
     listState: LazyGridState
 ) {

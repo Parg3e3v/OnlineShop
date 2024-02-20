@@ -2,6 +2,7 @@ package com.parg3v.domain.module
 
 import com.parg3v.domain.repository.ProductsRepository
 import com.parg3v.domain.use_cases.GetProductsUseCase
+import com.parg3v.domain.use_cases.ContainsTagUseCase
 import com.parg3v.domain.use_cases.SortProductsByPopularityUseCase
 import com.parg3v.domain.use_cases.SortProductsByPriceToMaxUseCase
 import com.parg3v.domain.use_cases.SortProductsByPriceToMinUseCase
@@ -50,5 +51,11 @@ object ProductsModule {
     @Singleton
     fun provideSortProductsByPriceToMinUseCase(): SortProductsByPriceToMinUseCase{
         return SortProductsByPriceToMinUseCase()
+    }
+
+    @Provides
+    @Singleton
+    fun provideContainsTagUseCase(): ContainsTagUseCase {
+        return ContainsTagUseCase()
     }
 }
