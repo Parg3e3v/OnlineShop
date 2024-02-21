@@ -1,4 +1,4 @@
-package com.parg3v.tz_effective.view.favourites
+package com.parg3v.tz_effective.view.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class FavouriteProductsViewModel @Inject constructor(
+class FavoriteProductsViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase
 ) : ViewModel() {
 

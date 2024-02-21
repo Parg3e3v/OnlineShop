@@ -1,4 +1,4 @@
-package com.parg3v.tz_effective.view.favourites
+package com.parg3v.tz_effective.view.favorites
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +24,7 @@ import com.parg3v.tz_effective.model.ProductsListState
 import com.parg3v.tz_effective.navigation.Screen
 
 @Composable
-fun FavouriteProductsScreen(
+fun FavoriteProductsScreen(
     controller: NavController,
     itemsListState: ProductsListState
 ) {

@@ -12,8 +12,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -35,7 +33,6 @@ import com.parg3v.tz_effective.navigation.Screen
 @Composable
 fun CustomScaffold(
     navController: NavController,
-    snackbarHostState: SnackbarHostState,
     items: List<BottomNavItem> = listOf(
         BottomNavItem.Home,
         BottomNavItem.Catalog,
@@ -59,7 +56,7 @@ fun CustomScaffold(
             topBarShareButtonState = false
         }
 
-        Screen.FavouritesScreen.route -> {
+        Screen.FavoritesScreen.route -> {
             bottomBarState = true
             topBarBackButtonState = true
             topBarShareButtonState = false
@@ -80,7 +77,6 @@ fun CustomScaffold(
 
     Box {
         Scaffold(
-            snackbarHost = { SnackbarHost(snackbarHostState) },
             bottomBar = {
                 AnimatedVisibility(
                     visible = bottomBarState,
@@ -123,7 +119,7 @@ fun CustomScaffold(
                             },
                             actions = {
                                 if (topBarShareButtonState) {
-                                    IconButton(onClick = {  }) {
+                                    IconButton(onClick = { }) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.icon_share),
                                             contentDescription = null

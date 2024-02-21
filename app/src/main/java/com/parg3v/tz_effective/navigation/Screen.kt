@@ -8,7 +8,7 @@ sealed class Screen(val route: String, val title: String? = null) {
     object DiscountScreen : Screen("discount_screen", "Акции")
     object ProductScreen : Screen("product_screen")
     object AccountScreen : Screen("account_screen", "Личный кабинет")
-    object FavouritesScreen : Screen("favourites_screen", "Избранное")
+    object FavoritesScreen : Screen("favorites_screen", "Избранное")
 
     companion object {
         fun getTitleByRoute(route: String?): String? {

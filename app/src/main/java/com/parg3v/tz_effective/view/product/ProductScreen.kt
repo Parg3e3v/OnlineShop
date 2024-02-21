@@ -109,7 +109,7 @@ fun ProductScreen(productState: ProductState) {
                         onClick = { /*TODO*/ }, modifier = Modifier.align(Alignment.TopEnd)
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.icon_favourite_outlined),
+                            painter = painterResource(id = R.drawable.icon_favorite_outlined),
                             tint = PinkDark,
                             contentDescription = null
                         )

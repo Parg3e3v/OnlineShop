@@ -1,4 +1,4 @@
-package com.parg3v.tz_effective.view.favourites
+package com.parg3v.tz_effective.view.favorites
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
@@ -44,7 +44,7 @@ import com.parg3v.tz_effective.ui.theme.LightGrey
 import com.parg3v.tz_effective.ui.theme.Typography
 
 @Composable
-fun FavouritesScreen(
+fun FavoritesScreen(
     controller: NavController,
     itemsListState: ProductsListState
 ) {
@@ -65,8 +65,8 @@ fun FavouritesScreen(
         }
 
         when (selectedIndex) {
-            0 -> FavouriteProductsScreen(controller = controller, itemsListState = itemsListState)
-            1 -> FavouriteBrandsScreen()
+            0 -> FavoriteProductsScreen(controller = controller, itemsListState = itemsListState)
+            1 -> FavoriteBrandsScreen()
         }
     }
 }

@@ -33,8 +33,8 @@ import com.parg3v.tz_effective.view.cart.CartScreen
 import com.parg3v.tz_effective.view.catalog.CatalogScreen
 import com.parg3v.tz_effective.view.catalog.CatalogViewModel
 import com.parg3v.tz_effective.view.discount.DiscountScreen
-import com.parg3v.tz_effective.view.favourites.FavouriteProductsViewModel
-import com.parg3v.tz_effective.view.favourites.FavouritesScreen
+import com.parg3v.tz_effective.view.favorites.FavoriteProductsViewModel
+import com.parg3v.tz_effective.view.favorites.FavoritesScreen
 import com.parg3v.tz_effective.view.home.HomeScreen
 import com.parg3v.tz_effective.view.login.LoginScreen
 import com.parg3v.tz_effective.view.login.LoginViewModel
@@ -54,7 +54,7 @@ fun Navigation(
     val productViewModel: ProductViewModel = hiltViewModel()
     val loginViewModel: LoginViewModel = hiltViewModel()
     val accountViewModel: AccountViewModel = hiltViewModel()
-    val favouriteProductsViewModel: FavouriteProductsViewModel = hiltViewModel()
+    val favoriteProductsViewModel: FavoriteProductsViewModel = hiltViewModel()
 
     val context = LocalContext.current
     val loginInfo by loginViewModel.loginInfoState.collectAsStateWithLifecycle()
@@ -78,13 +78,13 @@ fun Navigation(
 
     AnimatedNavHost(
         navController = navController,
-        startDestination = Screen.FavouritesScreen.route,
+        startDestination =
 
-//        if (loginInfo.data!! != LoginInfo()) {
-//            Screen.CatalogScreen.route
-//        } else {
-//            Screen.LoginScreen.route
-//        },
+        if (loginInfo.data!! != LoginInfo()) {
+            Screen.CatalogScreen.route
+        } else {
+            Screen.LoginScreen.route
+        },
 
         modifier = Modifier
             .padding(paddingValues)
@@ -165,11 +165,11 @@ fun Navigation(
                 accountViewModel::deleteLoginInfo
             )
         }
-        composable(route = Screen.FavouritesScreen.route,
+        composable(route = Screen.FavoritesScreen.route,
             exitTransition = { slideOut },
             popEnterTransition = { slideIn }) {
-            val itemsList by favouriteProductsViewModel.productsState.collectAsStateWithLifecycle()
-            FavouritesScreen(controller = navController, itemsListState = itemsList)
+            val itemsList by favoriteProductsViewModel.productsState.collectAsStateWithLifecycle()
+            FavoritesScreen(controller = navController, itemsListState = itemsList)
         }
         composable(route = "${Screen.ProductScreen.route}/{productId}",
             arguments = listOf(navArgument("productId") {

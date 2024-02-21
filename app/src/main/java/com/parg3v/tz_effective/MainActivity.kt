@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.parg3v.tz_effective.components.CustomScaffold
@@ -20,10 +18,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Tz_effectiveTheme {
-                val snackbarHostState = remember { SnackbarHostState() }
                 val navController: NavHostController = rememberAnimatedNavController()
-                CustomScaffold(navController = navController, snackbarHostState) { paddingValues ->
-                    Navigation(navController, paddingValues, snackbarHostState)
+                CustomScaffold(navController = navController) { paddingValues ->
+                    Navigation(navController, paddingValues)
                 }
             }
         }

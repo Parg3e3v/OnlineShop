@@ -1,4 +1,4 @@
-package com.parg3v.tz_effective.view.favourites
+package com.parg3v.tz_effective.view.favorites
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,8 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun FavouriteBrandsScreen() {
+fun FavoriteBrandsScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = "Favourite Brands", modifier = Modifier.align(Alignment.Center))
+        Text(text = "Favorite Brands", modifier = Modifier.align(Alignment.Center))
     }
 }

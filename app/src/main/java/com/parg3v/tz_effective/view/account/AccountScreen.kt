@@ -55,12 +55,12 @@ fun AccountScreen(
         )
 
         AccountMenuButton(
-            icon = painterResource(id = R.drawable.icon_favourite_outlined),
+            icon = painterResource(id = R.drawable.icon_favorite_outlined),
             iconTint = PinkDark,
-            title = stringResource(R.string.favourites),
-            content = "1 товар" // TODO: Show favourite products count
+            title = stringResource(R.string.favorites),
+            content = "1 товар" // TODO: Show favorite products count
         ) {
-            navController.navigate(Screen.FavouritesScreen.route)
+            navController.navigate(Screen.FavoritesScreen.route)
         }
 
         AccountMenuButton(
