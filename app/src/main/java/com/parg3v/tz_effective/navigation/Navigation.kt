@@ -29,6 +29,7 @@ import com.google.accompanist.navigation.animation.composable
 import com.parg3v.domain.model.LoginInfo
 import com.parg3v.tz_effective.R
 import com.parg3v.tz_effective.view.account.AccountScreen
+import com.parg3v.tz_effective.view.account.AccountViewModel
 import com.parg3v.tz_effective.view.cart.CartScreen
 import com.parg3v.tz_effective.view.catalog.CatalogScreen
 import com.parg3v.tz_effective.view.catalog.CatalogViewModel
@@ -53,6 +54,7 @@ fun Navigation(
         remember { mutableStateOf(R.string.by_popularity) } // not remembering in screen file
     val productViewModel: ProductViewModel = hiltViewModel()
     val loginViewModel: LoginViewModel = hiltViewModel()
+    val accountViewModel: AccountViewModel = hiltViewModel()
 
     val context = LocalContext.current
     val loginInfo by loginViewModel.loginInfoState.collectAsStateWithLifecycle()
@@ -157,7 +159,11 @@ fun Navigation(
         composable(route = Screen.AccountScreen.route,
             exitTransition = { slideOut },
             popEnterTransition = { slideIn }) {
-            AccountScreen(navController = navController)
+            AccountScreen(
+                navController = navController,
+                loginInfo = loginInfo.data ?: LoginInfo(),
+                accountViewModel::deleteLoginInfo
+            )
         }
         composable(route = Screen.FavouritesScreen.route,
             exitTransition = { slideOut },

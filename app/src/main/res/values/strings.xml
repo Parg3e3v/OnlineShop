@@ -29,6 +29,7 @@
     <string name="more">Подробнее</string>
     <string name="characteristics">Характеристики</string>
     <string name="ingredients">Состав</string>
+    <string name="logout">Выйти</string>
     <plurals name="available_count">
         <item quantity="one">Доступно для заказа %1$d штука</item>
         <item quantity="few">Доступно для заказа %1$d штуки</item>

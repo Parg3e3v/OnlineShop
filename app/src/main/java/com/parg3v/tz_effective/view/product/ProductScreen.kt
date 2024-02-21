@@ -357,7 +357,7 @@ fun ProductScreen(productState: ProductState) {
     } ?: run {
         Box(modifier = Modifier.fillMaxSize()) {
             Text(
-                text = "Error: ${productState.error}", modifier = Modifier.align(Alignment.Center)
+                text = productState.error, modifier = Modifier.align(Alignment.Center)
             )
         }
     }

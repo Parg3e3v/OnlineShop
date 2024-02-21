@@ -1,5 +1,6 @@
 package com.parg3v.domain.module
 
+import com.parg3v.domain.use_cases.DeleteLoginInfoUseCase
 import com.parg3v.domain.use_cases.GetLoginInfoUseCase
 import com.parg3v.domain.use_cases.SaveLoginInfoUseCase
 import dagger.Module
@@ -22,5 +23,11 @@ object LoginModule {
     @Singleton
     fun provideGetLoginInfoUseCase(): GetLoginInfoUseCase {
         return GetLoginInfoUseCase()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteLoginInfoUseCase(): DeleteLoginInfoUseCase {
+        return DeleteLoginInfoUseCase()
     }
 }
