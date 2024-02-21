@@ -65,7 +65,7 @@ fun CustomScaffold(
             topBarShareButtonState = false
         }
 
-        Screen.ProductScreen.route -> {
+        "${Screen.ProductScreen.route}/{productId}" -> {
             bottomBarState = true
             topBarBackButtonState = true
             topBarShareButtonState = true
@@ -124,7 +124,7 @@ fun CustomScaffold(
                             },
                             actions = {
                                 if (topBarShareButtonState) {
-                                    IconButton(onClick = { /* TODO */ }) {
+                                    IconButton(onClick = {  }) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.icon_share),
                                             contentDescription = null

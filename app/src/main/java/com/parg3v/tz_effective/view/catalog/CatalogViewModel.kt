@@ -36,11 +36,8 @@ class CatalogViewModel @Inject constructor(
     private val _selectedOption = MutableStateFlow("all")
     val selectedOption: StateFlow<String> = _selectedOption.asStateFlow()
 
-    init {
-        getProducts()
-    }
 
-    private fun getProducts() {
+    fun getProducts() {
         getProductsUseCase().onEach { result ->
             when (result) {
                 is ResultOf.Success<*> -> {

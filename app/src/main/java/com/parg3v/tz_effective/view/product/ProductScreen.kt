@@ -6,17 +6,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
+import com.parg3v.tz_effective.model.ProductState
 
 @Composable
-fun ProductScreen(navController: NavController) {
-
-    ProductScreenUI(controller = navController)
-}
-
-@Composable
-fun ProductScreenUI(controller: NavController) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = "Product", modifier = Modifier.align(Alignment.Center))
+fun ProductScreen(productState: ProductState) {
+    productState.data?.run {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Text(text = productState.data.title, modifier = Modifier.align(Alignment.Center))
+        }
+    } ?: run {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Text(
+                text = "Error: ${productState.error}",
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
     }
 }

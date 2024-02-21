@@ -20,11 +20,6 @@ import com.parg3v.tz_effective.ui.theme.PinkDark
 @Composable
 fun AccountScreen(navController: NavController) {
 
-    AccountScreenUI(controller = navController)
-}
-
-@Composable
-fun AccountScreenUI(controller: NavController) {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         AccountMenuButton(
             modifier = Modifier.padding(bottom = 16.dp),
@@ -41,7 +36,7 @@ fun AccountScreenUI(controller: NavController) {
             title = stringResource(R.string.favourites),
             content = "1 товар" // TODO: Show favourite products count
         ) {
-            controller.navigate(Screen.FavouritesScreen.route)
+            navController.navigate(Screen.FavouritesScreen.route)
         }
 
         AccountMenuButton(
@@ -69,3 +64,4 @@ fun AccountScreenUI(controller: NavController) {
         )
     }
 }
+

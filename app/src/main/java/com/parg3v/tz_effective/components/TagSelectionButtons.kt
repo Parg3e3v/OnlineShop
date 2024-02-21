@@ -40,6 +40,7 @@ fun TagSelectionButtons(
     modifier: Modifier = Modifier,
     tags: List<Int>,
     selectedOption: Int,
+    clickable: Boolean,
     onClick: (String) -> Unit,
     sortingType: MutableState<Int>,
     sortingMethod: (SortType) -> Unit,
@@ -58,16 +59,17 @@ fun TagSelectionButtons(
                 if (selectedOption == tag) {
                     Button(
                         onClick = {
-                            filter(
-                                onClick = onClick,
-                                tag = tag,
-                                sortingType = sortingType,
-                                sortingMethod = sortingMethod,
-                                listState = listState,
-                                scope = scope
-                            )
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = DarkBlue)
+                            if (clickable) {
+                                filter(
+                                    onClick = onClick,
+                                    tag = tag,
+                                    sortingType = sortingType,
+                                    sortingMethod = sortingMethod,
+                                    listState = listState,
+                                    scope = scope
+                                )
+                            }
+                        }, colors = ButtonDefaults.buttonColors(containerColor = DarkBlue)
                     ) {
                         Text(text = stringResource(id = tag))
                         Icon(
@@ -77,17 +79,19 @@ fun TagSelectionButtons(
                     }
                 } else {
                     Button(
+                        enabled = clickable,
                         onClick = {
-                            filter(
-                                onClick = onClick,
-                                tag = tag,
-                                sortingType = sortingType,
-                                sortingMethod = sortingMethod,
-                                listState = listState,
-                                scope = scope
-                            )
-                        },
-                        colors = ButtonDefaults.buttonColors(
+                            if (clickable) {
+                                filter(
+                                    onClick = onClick,
+                                    tag = tag,
+                                    sortingType = sortingType,
+                                    sortingMethod = sortingMethod,
+                                    listState = listState,
+                                    scope = scope
+                                )
+                            }
+                        }, colors = ButtonDefaults.buttonColors(
                             containerColor = LightGrey, contentColor = Grey
                         )
                     ) {

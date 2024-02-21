@@ -17,4 +17,13 @@ sealed class Screen(val route: String, val title: String? = null) {
             return matchingScreen?.title
         }
     }
+
+    fun withArgs(vararg args: String): String {
+        return buildString {
+            append(route)
+            args.forEach { arg ->
+                append("/$arg")
+            }
+        }
+    }
 }

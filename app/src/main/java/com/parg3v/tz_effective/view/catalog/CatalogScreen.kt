@@ -1,5 +1,6 @@
 package com.parg3v.tz_effective.view.catalog
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,9 +17,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,8 +27,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.parg3v.domain.model.Feedback
 import com.parg3v.domain.model.Info
@@ -46,34 +44,19 @@ import com.parg3v.tz_effective.model.SortType
 import com.parg3v.tz_effective.navigation.Screen
 import com.parg3v.tz_effective.ui.theme.Typography
 
-@Composable
-fun CatalogScreen(viewModel: CatalogViewModel = hiltViewModel(), navController: NavController) {
-
-    val itemsList by viewModel.productsState.collectAsStateWithLifecycle()
-    val selectedOption by viewModel.selectedOption.collectAsStateWithLifecycle()
-    val filteredItemsList by viewModel.filteredProductsState.collectAsStateWithLifecycle()
-    CatalogScreenUI(
-        controller = navController,
-        itemsListState = itemsList,
-        sortingMethod = viewModel::sortBy,
-        containsTag = viewModel::containsTag,
-        selectedOption = selectedOption,
-        filteredItemsListState = filteredItemsList
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CatalogScreenUI(
+fun CatalogScreen(
     controller: NavController,
     itemsListState: ProductsListState,
     sortingMethod: (SortType) -> Unit,
     containsTag: (String) -> Unit,
     selectedOption: String,
-    filteredItemsListState: ProductsListState
+    filteredItemsListState: ProductsListState,
+    sortingType: MutableState<Int>
 ) {
     val listState = rememberLazyGridState()
-    val sortingType = remember { mutableStateOf(R.string.by_popularity) }
+
     Column(modifier = Modifier.fillMaxSize()) {
 
         if (itemsListState.error.isEmpty()) {
@@ -100,7 +83,8 @@ fun CatalogScreenUI(
                 onClick = containsTag,
                 sortingType = sortingType,
                 sortingMethod = sortingMethod,
-                listState = listState
+                listState = listState,
+                clickable = !itemsListState.isLoading
             )
             Shimmer(isLoading = itemsListState.isLoading, contentAfterLoading = {
                 LazyVerticalGrid(
@@ -127,7 +111,7 @@ fun CatalogScreenUI(
                             )
                         },
                             product = product,
-                            onClick = { controller.navigate(Screen.ProductScreen.route) })
+                            onClick = { controller.navigate(Screen.ProductScreen.withArgs(product.id)) })
                     }
                 }
             }, loadingComposable = {
@@ -158,11 +142,12 @@ fun CatalogScreenUI(
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Preview
 @Composable
 fun CatalogScreenUIPreview() {
     Box(modifier = Modifier.background(Color.White)) {
-        CatalogScreenUI(
+        CatalogScreen(
             controller = NavController(LocalContext.current),
             itemsListState = ProductsListState(data = List(8) {
                 Product(
@@ -181,7 +166,8 @@ fun CatalogScreenUIPreview() {
             sortingMethod = {},
             containsTag = {},
             selectedOption = "all",
-            filteredItemsListState = ProductsListState()
+            filteredItemsListState = ProductsListState(),
+            sortingType = mutableStateOf(1)
         )
     }
 }

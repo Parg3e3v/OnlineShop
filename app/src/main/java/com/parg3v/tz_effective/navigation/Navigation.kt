@@ -11,20 +11,34 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
+import com.parg3v.domain.model.LoginInfo
 import com.parg3v.tz_effective.R
 import com.parg3v.tz_effective.view.account.AccountScreen
 import com.parg3v.tz_effective.view.cart.CartScreen
 import com.parg3v.tz_effective.view.catalog.CatalogScreen
+import com.parg3v.tz_effective.view.catalog.CatalogViewModel
 import com.parg3v.tz_effective.view.discount.DiscountScreen
 import com.parg3v.tz_effective.view.favourites.FavouritesScreen
 import com.parg3v.tz_effective.view.home.HomeScreen
 import com.parg3v.tz_effective.view.login.LoginScreen
+import com.parg3v.tz_effective.view.login.LoginViewModel
 import com.parg3v.tz_effective.view.product.ProductScreen
+import com.parg3v.tz_effective.view.product.ProductViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -33,83 +47,143 @@ fun Navigation(
     paddingValues: PaddingValues,
     snackbarHostState: SnackbarHostState
 ) {
+    var loginInfoFetched by remember { mutableStateOf(false) }
+    val catalogViewModel: CatalogViewModel = hiltViewModel()
+    val sortingType =
+        remember { mutableStateOf(R.string.by_popularity) } // not remembering in screen file
+    val productViewModel: ProductViewModel = hiltViewModel()
+    val loginViewModel: LoginViewModel = hiltViewModel()
+
+    val context = LocalContext.current
+    val loginInfo by loginViewModel.loginInfoState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(loginViewModel) {
+        loginViewModel.getLoginInfo(context)
+    }
+
+
     val slideIn = slideInHorizontally(
-        initialOffsetX = { -300 },
-        animationSpec = tween(
-            durationMillis = 300,
-            easing = FastOutSlowInEasing
+        initialOffsetX = { -300 }, animationSpec = tween(
+            durationMillis = 300, easing = FastOutSlowInEasing
         )
     ) + fadeIn(animationSpec = tween(300))
 
     val slideOut = slideOutHorizontally(
-        targetOffsetX = { -300 },
-        animationSpec = tween(
-            durationMillis = 300,
-            easing = FastOutSlowInEasing
+        targetOffsetX = { -300 }, animationSpec = tween(
+            durationMillis = 300, easing = FastOutSlowInEasing
         )
     ) + fadeOut(animationSpec = tween(300))
 
     AnimatedNavHost(
         navController = navController,
-        startDestination = Screen.LoginScreen.route,
-        modifier = Modifier.padding(paddingValues)
+        startDestination =
+
+        if (loginInfo.data!! != LoginInfo()) {
+            Screen.CatalogScreen.route
+        } else {
+            Screen.LoginScreen.route
+        },
+
+        modifier = Modifier
+            .padding(paddingValues)
             .padding(horizontal = dimensionResource(id = R.dimen.padding_login))
     ) {
-        composable(
-            route = Screen.LoginScreen.route,
+        composable(route = Screen.LoginScreen.route,
             exitTransition = { slideOut },
-            popEnterTransition = { slideIn }
-        ) {
-            LoginScreen(navController = navController)
+            popEnterTransition = { slideIn }) {
+
+            val name by loginViewModel.nameState.collectAsStateWithLifecycle()
+            val surname by loginViewModel.surnameState.collectAsStateWithLifecycle()
+            val phone by loginViewModel.phoneState.collectAsStateWithLifecycle()
+            val validName by loginViewModel.validNameState.collectAsStateWithLifecycle()
+            val validSurname by loginViewModel.validSurnameState.collectAsStateWithLifecycle()
+            val validPhone by loginViewModel.validPhoneState.collectAsStateWithLifecycle()
+
+            LoginScreen(
+                controller = navController,
+                nameProvider = { name },
+                validName = validName,
+                nameInputChange = loginViewModel::validateName,
+                surnameProvider = { surname },
+                validSurname = validSurname,
+                surnameInputChange = loginViewModel::validateSurname,
+                phoneProvider = { phone },
+                validPhone = validPhone,
+                phoneInputChange = loginViewModel::validatePhone,
+                saveData = loginViewModel::saveLoginInfo
+            )
+
         }
-        composable(
-            route = Screen.HomeScreen.route,
+        composable(route = Screen.HomeScreen.route,
             exitTransition = { slideOut },
-            popEnterTransition = { slideIn }
-        ) {
+            popEnterTransition = { slideIn }) {
             HomeScreen(navController = navController)
         }
-        composable(
-            route = Screen.CatalogScreen.route,
+        composable(route = Screen.CatalogScreen.route,
             exitTransition = { slideOut },
-            popEnterTransition = { slideIn }
-        ) {
-            CatalogScreen(navController = navController)
+            popEnterTransition = { slideIn }) {
+
+            if (!loginInfoFetched) {
+                LaunchedEffect(catalogViewModel) {
+                    catalogViewModel.getProducts()
+                    loginInfoFetched = true
+                }
+            }
+
+            val itemsList by catalogViewModel.productsState.collectAsStateWithLifecycle()
+            val selectedOption by catalogViewModel.selectedOption.collectAsStateWithLifecycle()
+            val filteredItemsList by catalogViewModel.filteredProductsState.collectAsStateWithLifecycle()
+
+            CatalogScreen(
+                controller = navController,
+                itemsListState = itemsList,
+                sortingMethod = catalogViewModel::sortBy,
+                containsTag = catalogViewModel::containsTag,
+                selectedOption = selectedOption,
+                filteredItemsListState = filteredItemsList,
+                sortingType = sortingType
+            )
         }
-        composable(
-            route = Screen.CartScreen.route,
+        composable(route = Screen.CartScreen.route,
             exitTransition = { slideOut },
-            popEnterTransition = { slideIn }
-        ) {
-            CartScreen(navController = navController)
+            popEnterTransition = { slideIn }) {
+            CartScreen()
         }
-        composable(
-            route = Screen.DiscountScreen.route,
+        composable(route = Screen.DiscountScreen.route,
             exitTransition = { slideOut },
-            popEnterTransition = { slideIn }
-        ) {
-            DiscountScreen(navController = navController)
+            popEnterTransition = { slideIn }) {
+            DiscountScreen()
         }
-        composable(
-            route = Screen.AccountScreen.route,
+        composable(route = Screen.AccountScreen.route,
             exitTransition = { slideOut },
-            popEnterTransition = { slideIn }
-        ) {
+            popEnterTransition = { slideIn }) {
             AccountScreen(navController = navController)
         }
-        composable(
-            route = Screen.FavouritesScreen.route,
+        composable(route = Screen.FavouritesScreen.route,
             exitTransition = { slideOut },
-            popEnterTransition = { slideIn }
-        ) {
-            FavouritesScreen(navController = navController)
+            popEnterTransition = { slideIn }) {
+            FavouritesScreen()
         }
-        composable(
-            route = Screen.ProductScreen.route,
+        composable(route = "${Screen.ProductScreen.route}/{productId}",
+            arguments = listOf(navArgument("productId") {
+                type = NavType.StringType
+                defaultValue = "-1"
+                nullable = false
+            }),
             exitTransition = { slideOut },
-            popEnterTransition = { slideIn }
-        ) {
-            ProductScreen(navController = navController)
+            popEnterTransition = { slideIn }) { entry ->
+
+
+            val productId = entry.arguments?.getString("productId")
+
+            productId?.let {
+
+                val productState by productViewModel.productState.collectAsStateWithLifecycle()
+                LaunchedEffect(productId) {
+                    productViewModel.getProductById(productId)
+                }
+                ProductScreen(productState = productState)
+            }
         }
     }
 }

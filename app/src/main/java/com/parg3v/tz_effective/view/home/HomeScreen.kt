@@ -12,15 +12,9 @@ import com.parg3v.tz_effective.navigation.Screen
 
 @Composable
 fun HomeScreen(navController: NavController) {
-
-    HomeScreenUI(controller = navController)
-}
-
-@Composable
-fun HomeScreenUI(controller: NavController) {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(text = "Home", modifier = Modifier
             .align(Alignment.Center)
-            .clickable { controller.navigate(Screen.ProductScreen.route) })
+            .clickable { navController.navigate(Screen.ProductScreen.route) })
     }
 }

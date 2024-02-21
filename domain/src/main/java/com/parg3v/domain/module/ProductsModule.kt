@@ -3,6 +3,7 @@ package com.parg3v.domain.module
 import com.parg3v.domain.repository.ProductsRepository
 import com.parg3v.domain.use_cases.GetProductsUseCase
 import com.parg3v.domain.use_cases.ContainsTagUseCase
+import com.parg3v.domain.use_cases.GetProductByIdUseCase
 import com.parg3v.domain.use_cases.SortProductsByPopularityUseCase
 import com.parg3v.domain.use_cases.SortProductsByPriceToMaxUseCase
 import com.parg3v.domain.use_cases.SortProductsByPriceToMinUseCase
@@ -23,6 +24,13 @@ object ProductsModule {
     fun provideGetProductsUseCase(productsRepository: ProductsRepository): GetProductsUseCase {
         return GetProductsUseCase(productsRepository)
     }
+
+    @Provides
+    @Singleton
+    fun provideGetProductByIdUseCase(productsRepository: ProductsRepository): GetProductByIdUseCase {
+        return GetProductByIdUseCase(productsRepository)
+    }
+
     @Provides
     @Singleton
     fun provideValidateNameUseCase(): ValidateNameUseCase {
