@@ -147,7 +147,7 @@ fun ProductItem(
                 }
 
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {},
                     modifier = Modifier
                         .padding(dimensionResource(id = R.dimen.padding_product_item_add_button))
                         .clip(

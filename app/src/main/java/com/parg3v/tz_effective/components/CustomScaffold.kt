@@ -97,7 +97,6 @@ fun CustomScaffold(
                         )
                     })
             },
-            // TODO: top app bar
             topBar = {
                 AnimatedVisibility(
                     visible = true,
