@@ -9,7 +9,6 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,6 +33,7 @@ import com.parg3v.tz_effective.view.cart.CartScreen
 import com.parg3v.tz_effective.view.catalog.CatalogScreen
 import com.parg3v.tz_effective.view.catalog.CatalogViewModel
 import com.parg3v.tz_effective.view.discount.DiscountScreen
+import com.parg3v.tz_effective.view.favourites.FavouriteProductsViewModel
 import com.parg3v.tz_effective.view.favourites.FavouritesScreen
 import com.parg3v.tz_effective.view.home.HomeScreen
 import com.parg3v.tz_effective.view.login.LoginScreen
@@ -45,8 +45,7 @@ import com.parg3v.tz_effective.view.product.ProductViewModel
 @Composable
 fun Navigation(
     navController: NavHostController,
-    paddingValues: PaddingValues,
-    snackbarHostState: SnackbarHostState
+    paddingValues: PaddingValues
 ) {
     var loginInfoFetched by remember { mutableStateOf(false) }
     val catalogViewModel: CatalogViewModel = hiltViewModel()
@@ -55,6 +54,7 @@ fun Navigation(
     val productViewModel: ProductViewModel = hiltViewModel()
     val loginViewModel: LoginViewModel = hiltViewModel()
     val accountViewModel: AccountViewModel = hiltViewModel()
+    val favouriteProductsViewModel: FavouriteProductsViewModel = hiltViewModel()
 
     val context = LocalContext.current
     val loginInfo by loginViewModel.loginInfoState.collectAsStateWithLifecycle()
@@ -78,13 +78,13 @@ fun Navigation(
 
     AnimatedNavHost(
         navController = navController,
-        startDestination =
+        startDestination = Screen.FavouritesScreen.route,
 
-        if (loginInfo.data!! != LoginInfo()) {
-            Screen.CatalogScreen.route
-        } else {
-            Screen.LoginScreen.route
-        },
+//        if (loginInfo.data!! != LoginInfo()) {
+//            Screen.CatalogScreen.route
+//        } else {
+//            Screen.LoginScreen.route
+//        },
 
         modifier = Modifier
             .padding(paddingValues)
@@ -168,7 +168,8 @@ fun Navigation(
         composable(route = Screen.FavouritesScreen.route,
             exitTransition = { slideOut },
             popEnterTransition = { slideIn }) {
-            FavouritesScreen()
+            val itemsList by favouriteProductsViewModel.productsState.collectAsStateWithLifecycle()
+            FavouritesScreen(controller = navController, itemsListState = itemsList)
         }
         composable(route = "${Screen.ProductScreen.route}/{productId}",
             arguments = listOf(navArgument("productId") {
