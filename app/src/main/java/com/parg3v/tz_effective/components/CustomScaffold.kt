@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -99,36 +100,69 @@ fun CustomScaffold(
                     enter = slideInVertically(initialOffsetY = { -it }),
                     exit = slideOutVertically(targetOffsetY = { -it }),
                     content = {
-                        CenterAlignedTopAppBar(
-                            title = {
-                                Text(
-                                    topAppBarTitle.orEmpty(),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            },
-                            navigationIcon = {
-                                if (topBarBackButtonState) {
-                                    IconButton(onClick = { navController.popBackStack() }) {
-                                        Icon(
-                                            imageVector = Icons.Filled.ArrowBack,
-                                            contentDescription = null
-                                        )
+                        if (navBackStackEntry?.destination?.route != Screen.FavoritesScreen.route) {
+                            CenterAlignedTopAppBar(
+                                title = {
+                                    Text(
+                                        topAppBarTitle.orEmpty(),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                },
+                                navigationIcon = {
+                                    if (topBarBackButtonState) {
+                                        IconButton(onClick = { navController.popBackStack() }) {
+                                            Icon(
+                                                imageVector = Icons.Filled.ArrowBack,
+                                                contentDescription = null
+                                            )
+                                        }
                                     }
-                                }
-                            },
-                            actions = {
-                                if (topBarShareButtonState) {
-                                    IconButton(onClick = { }) {
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.icon_share),
-                                            contentDescription = null
-                                        )
+                                },
+                                actions = {
+                                    if (topBarShareButtonState) {
+                                        IconButton(onClick = { }) {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.icon_share),
+                                                contentDescription = null
+                                            )
+                                        }
                                     }
-                                }
-                            },
-                            scrollBehavior = scrollBehavior
-                        )
+                                },
+                                scrollBehavior = scrollBehavior
+                            )
+                        } else {
+                            TopAppBar(
+                                title = {
+                                    Text(
+                                        topAppBarTitle.orEmpty(),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                },
+                                navigationIcon = {
+                                    if (topBarBackButtonState) {
+                                        IconButton(onClick = { navController.popBackStack() }) {
+                                            Icon(
+                                                imageVector = Icons.Filled.ArrowBack,
+                                                contentDescription = null
+                                            )
+                                        }
+                                    }
+                                },
+                                actions = {
+                                    if (topBarShareButtonState) {
+                                        IconButton(onClick = { }) {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.icon_share),
+                                                contentDescription = null
+                                            )
+                                        }
+                                    }
+                                },
+                                scrollBehavior = scrollBehavior
+                            )
+                        }
                     }
                 )
             }
