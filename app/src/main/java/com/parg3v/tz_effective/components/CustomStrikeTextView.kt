@@ -17,6 +17,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.parg3v.tz_effective.ui.theme.Grey
+import com.parg3v.tz_effective.ui.theme.Tz_effectiveTheme
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
@@ -75,5 +76,5 @@ fun CustomStrikeTextView(
 @Preview
 @Composable
 fun CustomStrikeTextViewPreview() {
-    CustomStrikeTextView(text = "749 ₽")
+    Tz_effectiveTheme { CustomStrikeTextView(text = "749 ₽") }
 }

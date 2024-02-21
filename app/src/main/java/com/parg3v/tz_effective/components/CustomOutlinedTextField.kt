@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.parg3v.tz_effective.R
 import com.parg3v.tz_effective.ui.theme.Grey
 import com.parg3v.tz_effective.ui.theme.LightGrey
+import com.parg3v.tz_effective.ui.theme.Tz_effectiveTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,8 +39,7 @@ fun CustomOutlinedTextField(
             },
         ) {
             Icon(
-                painterResource(id = R.drawable.icon_clear),
-                contentDescription = ""
+                painterResource(id = R.drawable.icon_clear), contentDescription = ""
             )
         }
     }
@@ -67,6 +67,6 @@ fun CustomOutlinedTextField(
 @Preview
 @Composable
 fun CustomOutlinedTextFieldPreview() {
-    CustomOutlinedTextField(value = { "" }, onValueChange = {})
+    Tz_effectiveTheme { CustomOutlinedTextField(value = { "" }, onValueChange = {}) }
 }
 

@@ -31,6 +31,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.parg3v.domain.model.Feedback
 import com.parg3v.domain.model.Info
@@ -42,6 +43,7 @@ import com.parg3v.tz_effective.ui.theme.LightGrey
 import com.parg3v.tz_effective.ui.theme.Orange
 import com.parg3v.tz_effective.ui.theme.PinkDark
 import com.parg3v.tz_effective.ui.theme.Typography
+import com.parg3v.tz_effective.ui.theme.Tz_effectiveTheme
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -76,6 +78,16 @@ fun ProductItem(
                         .fillMaxWidth()
                         .fillMaxHeight(0.45F)
                 )
+                HorizontalPagerIndicator(
+                    pagerState = pagerState,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(dimensionResource(id = R.dimen.padding_pager_indicator)),
+                    activeColor = PinkDark,
+                    inactiveColor = Grey,
+                    indicatorWidth = dimensionResource(id = R.dimen.pager_indicator_size),
+                    indicatorHeight = dimensionResource(id = R.dimen.pager_indicator_size)
+                )
 
                 CustomStrikeTextView(
                     text = "${product.price.price} ${product.price.unit}",
@@ -84,7 +96,7 @@ fun ProductItem(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = "${product.price.priceWithDiscount} ${product.price.unit}",
-                        style = Typography.titleMedium
+                        style = Typography.labelLarge
                     )
                     Text(
                         text = "-${product.price.discount}%",
@@ -93,7 +105,10 @@ fun ProductItem(
                             .padding(start = dimensionResource(id = R.dimen.padding_product_item_discount))
                             .clip(RoundedCornerShape(dimensionResource(id = R.dimen.rounded_corner_radius)))
                             .background(PinkDark)
-                            .padding(horizontal = 6.dp, vertical = 3.dp),
+                            .padding(
+                                horizontal = dimensionResource(id = R.dimen.padding_discount_text_horizontal),
+                                vertical = dimensionResource(id = R.dimen.padding_discount_text_vertical)
+                            ),
                         color = Color.White
                     )
                 }
@@ -171,19 +186,21 @@ fun ProductItem(
 @Preview
 @Composable
 fun ProductItemPreview() {
-    ProductItem(
-        images = listOf(painterResource(id = R.drawable.img_2251)), product = Product(
-            id = "",
-            title = "ESFOLIO",
-            subtitle = "Пенка для умывания`A`PIEU` `DEEP CLEAN` 200 мл",
-            price = Price("749", 35, "489", unit = "₽"),
-            feedback = Feedback(1, 1.5),
-            tags = emptyList(),
-            available = 20,
-            description = "",
-            info = listOf(Info("", "")),
-            ingredients = ""
-        )
-    ) {}
+    Tz_effectiveTheme {
+        ProductItem(
+            images = listOf(painterResource(id = R.drawable.img_2251)), product = Product(
+                id = "",
+                title = "ESFOLIO",
+                subtitle = "Пенка для умывания`A`PIEU` `DEEP CLEAN` 200 мл",
+                price = Price("749", 35, "489", unit = "₽"),
+                feedback = Feedback(1, 1.5),
+                tags = emptyList(),
+                available = 20,
+                description = "",
+                info = listOf(Info("", "")),
+                ingredients = ""
+            )
+        ) {}
+    }
 }
 

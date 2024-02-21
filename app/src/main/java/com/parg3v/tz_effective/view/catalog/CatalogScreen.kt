@@ -43,6 +43,7 @@ import com.parg3v.tz_effective.model.ProductsListState
 import com.parg3v.tz_effective.model.SortType
 import com.parg3v.tz_effective.navigation.Screen
 import com.parg3v.tz_effective.ui.theme.Typography
+import com.parg3v.tz_effective.ui.theme.Tz_effectiveTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,6 +79,7 @@ fun CatalogScreen(
                 }
             }
             TagSelectionButtons(
+                modifier = Modifier.padding(top = dimensionResource(id = R.dimen.padding_top_tag_menu)),
                 tags = Config.TAGS.values.toList(),
                 selectedOption = Config.TAGS[selectedOption]!!,
                 onClick = containsTag,
@@ -146,28 +148,30 @@ fun CatalogScreen(
 @Preview
 @Composable
 fun CatalogScreenUIPreview() {
-    Box(modifier = Modifier.background(Color.White)) {
-        CatalogScreen(
-            controller = NavController(LocalContext.current),
-            itemsListState = ProductsListState(data = List(8) {
-                Product(
-                    id = "cbf0c984-7c6c-4ada-82da-e29dc698bb50",
-                    title = "ESFOLIO",
-                    subtitle = "Пенка для умывания`A`PIEU` `DEEP CLEAN` 200 мл",
-                    price = Price("749", 35, "489", unit = "₽"),
-                    feedback = Feedback(1, 1.5),
-                    tags = emptyList(),
-                    available = 20,
-                    description = "",
-                    info = listOf(Info("", "")),
-                    ingredients = ""
-                )
-            }),
-            sortingMethod = {},
-            containsTag = {},
-            selectedOption = "all",
-            filteredItemsListState = ProductsListState(),
-            sortingType = mutableStateOf(1)
-        )
+    Tz_effectiveTheme {
+        Box(modifier = Modifier.background(Color.White)) {
+            CatalogScreen(
+                controller = NavController(LocalContext.current),
+                itemsListState = ProductsListState(data = List(8) {
+                    Product(
+                        id = "cbf0c984-7c6c-4ada-82da-e29dc698bb50",
+                        title = "ESFOLIO",
+                        subtitle = "Пенка для умывания`A`PIEU` `DEEP CLEAN` 200 мл",
+                        price = Price("749", 35, "489", unit = "₽"),
+                        feedback = Feedback(1, 1.5),
+                        tags = emptyList(),
+                        available = 20,
+                        description = "",
+                        info = listOf(Info("", "")),
+                        ingredients = ""
+                    )
+                }),
+                sortingMethod = {},
+                containsTag = {},
+                selectedOption = "all",
+                filteredItemsListState = ProductsListState(),
+                sortingType = mutableStateOf(1)
+            )
+        }
     }
 }

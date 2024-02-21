@@ -30,6 +30,7 @@ import com.parg3v.tz_effective.model.SortType
 import com.parg3v.tz_effective.ui.theme.DarkBlue
 import com.parg3v.tz_effective.ui.theme.Grey
 import com.parg3v.tz_effective.ui.theme.LightGrey
+import com.parg3v.tz_effective.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -71,7 +72,7 @@ fun TagSelectionButtons(
                             }
                         }, colors = ButtonDefaults.buttonColors(containerColor = DarkBlue)
                     ) {
-                        Text(text = stringResource(id = tag))
+                        Text(text = stringResource(id = tag), style = Typography.displayMedium)
                         Icon(
                             painter = painterResource(id = R.drawable.icon_clear_small),
                             contentDescription = null
@@ -95,7 +96,7 @@ fun TagSelectionButtons(
                             containerColor = LightGrey, contentColor = Grey
                         )
                     ) {
-                        Text(text = stringResource(id = tag))
+                        Text(text = stringResource(id = tag), style = Typography.displayMedium)
                     }
                 }
             }

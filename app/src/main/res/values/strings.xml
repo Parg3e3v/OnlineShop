@@ -24,4 +24,21 @@
     <string name="suntan">Загар</string>
     <string name="masks">Маски</string>
     <string name="unexpected_error">unexpected Error</string>
+    <string name="description">Описание</string>
+    <string name="hide">Скрыть</string>
+    <string name="more">Подробнее</string>
+    <string name="characteristics">Характеристики</string>
+    <string name="ingredients">Состав</string>
+    <plurals name="available_count">
+        <item quantity="one">Доступно для заказа %1$d штука</item>
+        <item quantity="few">Доступно для заказа %1$d штуки</item>
+        <item quantity="many">Доступно для заказа %1$d штук</item>
+        <item quantity="other">Доступно для заказа %1$d штук</item>
+    </plurals>
+    <plurals name="feedback_count">
+        <item quantity="one">%1$d отзыв</item>
+        <item quantity="few">%1$d отзыва</item>
+        <item quantity="many">%1$d отзывов</item>
+        <item quantity="other">%1$d отзывов</item>
+    </plurals>
 </resources>

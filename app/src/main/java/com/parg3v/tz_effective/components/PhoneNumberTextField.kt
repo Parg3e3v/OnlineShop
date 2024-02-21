@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.parg3v.tz_effective.R
 import com.parg3v.tz_effective.ui.theme.Grey
 import com.parg3v.tz_effective.ui.theme.LightGrey
+import com.parg3v.tz_effective.ui.theme.Tz_effectiveTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -125,5 +126,5 @@ private fun phoneNumberInputFormatter(text: AnnotatedString): TransformedText {
 @Preview
 @Composable
 fun PhoneFieldPreview() {
-    PhoneNumberTextField(valueProvider = { "1234567890" }, onValueChange = {})
+    Tz_effectiveTheme { PhoneNumberTextField(valueProvider = { "1234567890" }, onValueChange = {}) }
 }
