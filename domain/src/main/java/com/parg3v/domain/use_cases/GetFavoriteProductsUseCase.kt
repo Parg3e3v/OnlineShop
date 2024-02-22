@@ -9,14 +9,14 @@ import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import javax.inject.Inject
 
-class GetProductsUseCase @Inject constructor(
+class GetFavoriteProductsUseCase @Inject constructor(
     private val productsRepository: ProductsRepository
 ) {
     operator fun invoke(): Flow<ResultOf<List<Product>>> = flow {
         try {
             emit(ResultOf.Loading())
-            delay(3000) // For shimmer to be shown
-            val products = productsRepository.getProducts()
+            delay(1000) // For shimmer to be shown
+            val products = productsRepository.getFavoriteProducts()
             emit(ResultOf.Success(products))
         } catch (e: IOException) {
             emit(ResultOf.Failure("Couldn't get products"))

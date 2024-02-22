@@ -132,18 +132,19 @@ fun Navigation(
                 }
             }
 
-            val itemsList by catalogViewModel.productsState.collectAsStateWithLifecycle()
             val selectedOption by catalogViewModel.selectedOption.collectAsStateWithLifecycle()
             val filteredItemsList by catalogViewModel.filteredProductsState.collectAsStateWithLifecycle()
 
             CatalogScreen(
                 controller = navController,
-                itemsListState = itemsList,
+                itemsListStateFlow = catalogViewModel.productsState,
                 sortingMethod = catalogViewModel::sortBy,
                 containsTag = catalogViewModel::containsTag,
                 selectedOption = selectedOption,
                 filteredItemsListState = filteredItemsList,
-                sortingType = sortingType
+                sortingType = sortingType,
+                addToFavourites = catalogViewModel::addToFavorites,
+                removeFromFavourites = catalogViewModel::deleteFromFavorites
             )
         }
         composable(route = Screen.CartScreen.route,
@@ -168,8 +169,19 @@ fun Navigation(
         composable(route = Screen.FavoritesScreen.route,
             exitTransition = { slideOut },
             popEnterTransition = { slideIn }) {
+
             val itemsList by favoriteProductsViewModel.productsState.collectAsStateWithLifecycle()
-            FavoritesScreen(controller = navController, itemsListState = itemsList)
+
+            LaunchedEffect(favoriteProductsViewModel) {
+                favoriteProductsViewModel.getProducts()
+            }
+
+            FavoritesScreen(
+                controller = navController,
+                itemsListState = itemsList,
+                addToFavorites = favoriteProductsViewModel::addToFavorites,
+                removeFromFavorites = favoriteProductsViewModel::deleteFromFavorites
+            )
         }
         composable(route = "${Screen.ProductScreen.route}/{productId}",
             arguments = listOf(navArgument("productId") {

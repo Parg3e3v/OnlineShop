@@ -1,9 +1,13 @@
 package com.parg3v.domain.repository
 
 import com.parg3v.domain.model.Product
-import com.parg3v.domain.model.ProductList
 
 interface ProductsRepository {
-    suspend fun getProducts(): ProductList
+    suspend fun getProducts(): List<Product>
     suspend fun getProductById(id: String): Product?
+    suspend fun getFavoriteProducts(): List<Product>
+    suspend fun isFavorite(productId: String): Boolean
+
+    suspend fun saveToFavoriteProducts(product: Product)
+    suspend fun deleteFromFavorites(product: Product)
 }

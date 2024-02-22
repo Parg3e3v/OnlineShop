@@ -14,7 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.parg3v.domain.model.Product
 import com.parg3v.tz_effective.R
 import com.parg3v.tz_effective.components.ProductItem
 import com.parg3v.tz_effective.components.ProductItemPlaceholder
@@ -26,35 +28,50 @@ import com.parg3v.tz_effective.navigation.Screen
 @Composable
 fun FavoriteProductsScreen(
     controller: NavController,
-    itemsListState: ProductsListState
+    itemsListState: ProductsListState,
+    addToFavorites: (Product) -> Unit,
+    removeFromFavorites: (Product) -> Unit
 ) {
 
     val listState = rememberLazyGridState()
     if (itemsListState.error.isEmpty()) {
         Shimmer(isLoading = itemsListState.isLoading, contentAfterLoading = {
-            LazyVerticalGrid(
-                state = listState,
-                columns = GridCells.Fixed(2),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(
-                        top = dimensionResource(id = R.dimen.padding_catalog_items_top)
+            if (itemsListState.data.isEmpty()){
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        text = stringResource(R.string.isempty),
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+            }else {
+                LazyVerticalGrid(
+                    state = listState,
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            top = dimensionResource(id = R.dimen.padding_catalog_items_top)
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(
+                        dimensionResource(id = R.dimen.arrangement_catalog_items)
                     ),
-                verticalArrangement = Arrangement.spacedBy(
-                    dimensionResource(id = R.dimen.arrangement_catalog_items)
-                ),
-                horizontalArrangement = Arrangement.spacedBy(
-                    dimensionResource(id = R.dimen.arrangement_catalog_items)
-                )
-            ) {
-                items(itemsListState.data) { product ->
-                    ProductItem(images = Config.IMAGES_BY_ID[product.id]!!.map {
-                        painterResource(
-                            id = it
+                    horizontalArrangement = Arrangement.spacedBy(
+                        dimensionResource(id = R.dimen.arrangement_catalog_items)
+                    )
+                ) {
+                    items(itemsListState.data) { product ->
+                        ProductItem(
+                            images = Config.IMAGES_BY_ID[product.id]!!.map {
+                                painterResource(
+                                    id = it
+                                )
+                            },
+                            product = product,
+                            onClick = { controller.navigate(Screen.ProductScreen.withArgs(product.id)) },
+                            addToFavorites = addToFavorites,
+                            removeFromFavorites = removeFromFavorites
                         )
-                    },
-                        product = product,
-                        onClick = { controller.navigate(Screen.ProductScreen.withArgs(product.id)) })
+                    }
                 }
             }
         }, loadingComposable = {

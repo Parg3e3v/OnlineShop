@@ -38,6 +38,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.parg3v.domain.model.Product
 import com.parg3v.tz_effective.R
 import com.parg3v.tz_effective.model.ProductsListState
 import com.parg3v.tz_effective.ui.theme.LightGrey
@@ -46,7 +47,9 @@ import com.parg3v.tz_effective.ui.theme.Typography
 @Composable
 fun FavoritesScreen(
     controller: NavController,
-    itemsListState: ProductsListState
+    itemsListState: ProductsListState,
+    addToFavorites: (Product) -> Unit,
+    removeFromFavorites: (Product) -> Unit
 ) {
     val items = remember {
         listOf(R.string.products, R.string.brands)
@@ -65,8 +68,12 @@ fun FavoritesScreen(
         }
 
         when (selectedIndex) {
-            0 -> FavoriteProductsScreen(controller = controller, itemsListState = itemsListState)
-            1 -> FavoriteBrandsScreen()
+            0 -> FavoriteProductsScreen(
+                controller = controller,
+                itemsListState = itemsListState,
+                addToFavorites = addToFavorites,
+                removeFromFavorites = removeFromFavorites
+            )
         }
     }
 }

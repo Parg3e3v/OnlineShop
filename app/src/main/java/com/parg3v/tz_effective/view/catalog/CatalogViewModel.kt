@@ -3,8 +3,12 @@ package com.parg3v.tz_effective.view.catalog
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.parg3v.domain.common.ResultOf
+import com.parg3v.domain.model.Product
 import com.parg3v.domain.use_cases.ContainsTagUseCase
+import com.parg3v.domain.use_cases.DeleteFromFavoritesUseCase
+import com.parg3v.domain.use_cases.IsFavoriteProductUseCase
 import com.parg3v.domain.use_cases.GetProductsUseCase
+import com.parg3v.domain.use_cases.SaveToFavoritesUseCase
 import com.parg3v.domain.use_cases.SortProductsByPopularityUseCase
 import com.parg3v.domain.use_cases.SortProductsByPriceToMaxUseCase
 import com.parg3v.domain.use_cases.SortProductsByPriceToMinUseCase
@@ -16,6 +20,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,7 +30,10 @@ class CatalogViewModel @Inject constructor(
     private val sortProductsByPopularityUseCase: SortProductsByPopularityUseCase,
     private val sortProductsByPriceToMinUseCase: SortProductsByPriceToMinUseCase,
     private val sortProductsByPriceToMaxUseCase: SortProductsByPriceToMaxUseCase,
-    private val containsTagUseCase: ContainsTagUseCase
+    private val containsTagUseCase: ContainsTagUseCase,
+    private val saveToFavoritesUseCase: SaveToFavoritesUseCase,
+    private val deleteFromFavoritesUseCase: DeleteFromFavoritesUseCase,
+    private val isFavoriteProductUseCase: IsFavoriteProductUseCase
 ) : ViewModel() {
 
     private val _productsState = MutableStateFlow(ProductsListState())
@@ -41,7 +50,8 @@ class CatalogViewModel @Inject constructor(
         getProductsUseCase().onEach { result ->
             when (result) {
                 is ResultOf.Success<*> -> {
-                    _productsState.value = ProductsListState(data = result.data.orEmpty())
+                    _productsState.value =
+                        ProductsListState(data = updateFavoriteProducts(result.data.orEmpty()))
                 }
 
                 is ResultOf.Failure -> {
@@ -94,5 +104,26 @@ class CatalogViewModel @Inject constructor(
         _filteredProductsState.value =
             ProductsListState(data = containsTagUseCase(_productsState.value.data, tag))
         _selectedOption.value = tag
+    }
+
+    fun addToFavorites(product: Product) {
+        viewModelScope.launch {
+            saveToFavoritesUseCase(product)
+            _productsState.value =
+                ProductsListState(data = updateFavoriteProducts(_productsState.value.data))
+        }
+    }
+
+    fun deleteFromFavorites(product: Product) {
+        viewModelScope.launch {
+            deleteFromFavoritesUseCase(product)
+            _productsState.update { ProductsListState(data = updateFavoriteProducts(it.data)) }
+        }
+    }
+
+    private suspend fun updateFavoriteProducts(products: List<Product>): List<Product> {
+        return products.onEach { product ->
+            product.isFavorite = isFavoriteProductUseCase(product.id)
+        }
     }
 }

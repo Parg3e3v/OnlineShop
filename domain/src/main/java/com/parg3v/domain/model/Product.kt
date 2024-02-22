@@ -10,7 +10,8 @@ data class Product(
     val available: Int,
     val description: String,
     val info: List<Info>,
-    val ingredients: String
+    val ingredients: String,
+    var isFavorite: Boolean = false
 )
 
 data class Price(

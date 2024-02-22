@@ -1,7 +1,5 @@
 package com.parg3v.tz_effective.view.catalog
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,19 +16,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.parg3v.domain.model.Feedback
-import com.parg3v.domain.model.Info
-import com.parg3v.domain.model.Price
 import com.parg3v.domain.model.Product
 import com.parg3v.tz_effective.R
 import com.parg3v.tz_effective.components.ProductItem
@@ -43,20 +36,23 @@ import com.parg3v.tz_effective.model.ProductsListState
 import com.parg3v.tz_effective.model.SortType
 import com.parg3v.tz_effective.navigation.Screen
 import com.parg3v.tz_effective.ui.theme.Typography
-import com.parg3v.tz_effective.ui.theme.Tz_effectiveTheme
+import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatalogScreen(
     controller: NavController,
-    itemsListState: ProductsListState,
+    itemsListStateFlow: StateFlow<ProductsListState>,
     sortingMethod: (SortType) -> Unit,
     containsTag: (String) -> Unit,
     selectedOption: String,
     filteredItemsListState: ProductsListState,
-    sortingType: MutableState<Int>
+    sortingType: MutableState<Int>,
+    addToFavourites: (Product) -> Unit,
+    removeFromFavourites: (Product) -> Unit
 ) {
     val listState = rememberLazyGridState()
+    val itemsListState by itemsListStateFlow.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -89,31 +85,50 @@ fun CatalogScreen(
                 clickable = !itemsListState.isLoading
             )
             Shimmer(isLoading = itemsListState.isLoading, contentAfterLoading = {
-                LazyVerticalGrid(
-                    state = listState,
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(
-                            top = dimensionResource(id = R.dimen.padding_catalog_items_top)
+                if (itemsListState.data.isEmpty()) {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Text(
+                            text = stringResource(R.string.isempty),
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+                } else {
+                    LazyVerticalGrid(
+                        state = listState,
+                        columns = GridCells.Fixed(2),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(
+                                top = dimensionResource(id = R.dimen.padding_catalog_items_top)
+                            ),
+                        verticalArrangement = Arrangement.spacedBy(
+                            dimensionResource(id = R.dimen.arrangement_catalog_items)
                         ),
-                    verticalArrangement = Arrangement.spacedBy(
-                        dimensionResource(id = R.dimen.arrangement_catalog_items)
-                    ),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        dimensionResource(id = R.dimen.arrangement_catalog_items)
-                    )
-                ) {
-                    items(
-                        (if (selectedOption == "all") itemsListState else filteredItemsListState).data
-                    ) { product ->
-                        ProductItem(images = Config.IMAGES_BY_ID[product.id]!!.map {
-                            painterResource(
-                                id = it
+                        horizontalArrangement = Arrangement.spacedBy(
+                            dimensionResource(id = R.dimen.arrangement_catalog_items)
+                        )
+                    ) {
+                        items(
+                            (if (selectedOption == "all") itemsListState else filteredItemsListState).data
+                        ) { product ->
+                            ProductItem(
+                                images = Config.IMAGES_BY_ID[product.id]!!.map {
+                                    painterResource(
+                                        id = it
+                                    )
+                                },
+                                product = product,
+                                onClick = {
+                                    controller.navigate(
+                                        Screen.ProductScreen.withArgs(
+                                            product.id
+                                        )
+                                    )
+                                },
+                                addToFavorites = addToFavourites,
+                                removeFromFavorites = removeFromFavourites
                             )
-                        },
-                            product = product,
-                            onClick = { controller.navigate(Screen.ProductScreen.withArgs(product.id)) })
+                        }
                     }
                 }
             }, loadingComposable = {
@@ -143,35 +158,37 @@ fun CatalogScreen(
         }
     }
 }
-
-@SuppressLint("UnrememberedMutableState")
-@Preview
-@Composable
-fun CatalogScreenUIPreview() {
-    Tz_effectiveTheme {
-        Box(modifier = Modifier.background(Color.White)) {
-            CatalogScreen(
-                controller = NavController(LocalContext.current),
-                itemsListState = ProductsListState(data = List(8) {
-                    Product(
-                        id = "cbf0c984-7c6c-4ada-82da-e29dc698bb50",
-                        title = "ESFOLIO",
-                        subtitle = "Пенка для умывания`A`PIEU` `DEEP CLEAN` 200 мл",
-                        price = Price("749", 35, "489", unit = "₽"),
-                        feedback = Feedback(1, 1.5),
-                        tags = emptyList(),
-                        available = 20,
-                        description = "",
-                        info = listOf(Info("", "")),
-                        ingredients = ""
-                    )
-                }),
-                sortingMethod = {},
-                containsTag = {},
-                selectedOption = "all",
-                filteredItemsListState = ProductsListState(),
-                sortingType = mutableStateOf(1)
-            )
-        }
-    }
-}
+//
+//@SuppressLint("UnrememberedMutableState")
+//@Preview
+//@Composable
+//fun CatalogScreenUIPreview() {
+//    Tz_effectiveTheme {
+//        Box(modifier = Modifier.background(Color.White)) {
+//            CatalogScreen(
+//                controller = NavController(LocalContext.current),
+//                itemsListStateFlow = ProductsListState(data = List(8) {
+//                    Product(
+//                        id = "cbf0c984-7c6c-4ada-82da-e29dc698bb50",
+//                        title = "ESFOLIO",
+//                        subtitle = "Пенка для умывания`A`PIEU` `DEEP CLEAN` 200 мл",
+//                        price = Price("749", 35, "489", unit = "₽"),
+//                        feedback = Feedback(1, 1.5),
+//                        tags = emptyList(),
+//                        available = 20,
+//                        description = "",
+//                        info = listOf(Info("", "")),
+//                        ingredients = ""
+//                    )
+//                }),
+//                sortingMethod = {},
+//                containsTag = {},
+//                selectedOption = "all",
+//                filteredItemsListState = ProductsListState(),
+//                sortingType = mutableStateOf(1),
+//                addToFavourites = {},
+//                removeFromFavourites = {}
+//            )
+//        }
+//    }
+//}

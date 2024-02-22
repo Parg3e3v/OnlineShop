@@ -49,9 +49,15 @@ import com.parg3v.tz_effective.ui.theme.Tz_effectiveTheme
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ProductItem(
-    modifier: Modifier = Modifier, images: List<Painter>, product: Product, onClick: () -> Unit
+    modifier: Modifier = Modifier,
+    images: List<Painter>,
+    product: Product,
+    onClick: () -> Unit,
+    addToFavorites: (Product) -> Unit = {},
+    removeFromFavorites: (Product) -> Unit = {}
 ) {
     val pagerState = rememberPagerState(initialPage = 0)
+
     Card(
         border = BorderStroke(1.dp, LightGrey),
         modifier = modifier
@@ -170,9 +176,19 @@ fun ProductItem(
                 }
             }
 
-            IconButton(onClick = { /*TODO*/ }, modifier = Modifier.align(Alignment.TopEnd)) {
+            IconButton(
+                onClick = {
+                    modifyFavorite(
+                        favorite = product.isFavorite,
+                        product = product,
+                        addToFavorites = addToFavorites,
+                        removeFromFavorites = removeFromFavorites
+                    )
+                },
+                modifier = Modifier.align(Alignment.TopEnd)
+            ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.icon_favorite_outlined),
+                    painter = painterResource(id = if (product.isFavorite) R.drawable.icon_favorite else R.drawable.icon_favorite_outlined),
                     tint = PinkDark,
                     contentDescription = null
                 )
@@ -183,12 +199,26 @@ fun ProductItem(
     }
 }
 
+fun modifyFavorite(
+    favorite: Boolean,
+    product: Product,
+    removeFromFavorites: (Product) -> Unit,
+    addToFavorites: (Product) -> Unit
+) {
+    if (favorite) {
+        removeFromFavorites(product)
+    } else {
+        addToFavorites(product)
+    }
+}
+
 @Preview
 @Composable
 fun ProductItemPreview() {
     Tz_effectiveTheme {
         ProductItem(
-            images = listOf(painterResource(id = R.drawable.img_2251)), product = Product(
+            images = listOf(painterResource(id = R.drawable.img_2251)),
+            product = Product(
                 id = "",
                 title = "ESFOLIO",
                 subtitle = "Пенка для умывания`A`PIEU` `DEEP CLEAN` 200 мл",
@@ -199,8 +229,11 @@ fun ProductItemPreview() {
                 description = "",
                 info = listOf(Info("", "")),
                 ingredients = ""
-            )
-        ) {}
+            ),
+            onClick = {},
+            addToFavorites = {},
+            removeFromFavorites = {}
+        )
     }
 }
 
