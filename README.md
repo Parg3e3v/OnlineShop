@@ -25,7 +25,7 @@
 ## Скриншоты
 
 ### Вход 1
-<img src="https://i.imgur.com/GUjvDm0.png" width="100">
+<img src="https://i.imgur.com/GUjvDm0.png" width="250">
 
 ### Вход 2
 <img src="https://i.imgur.com/VkekIBU.png" width="48">
