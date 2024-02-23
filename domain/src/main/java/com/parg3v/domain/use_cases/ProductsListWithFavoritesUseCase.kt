@@ -8,16 +8,17 @@ import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import javax.inject.Inject
 
-class GetFavoriteProductsUseCase @Inject constructor(
+class ProductsListWithFavoritesUseCase @Inject constructor(
     private val productsRepository: ProductsRepository
 ) {
-    operator fun invoke(): Flow<ResultOf<List<Product>>> = flow {
+    operator fun invoke(products: List<Product>): Flow<ResultOf<List<Product>>> = flow {
         try {
             emit(ResultOf.Loading())
-            val products = productsRepository.getFavoriteProducts()
-            emit(ResultOf.Success(products))
+            val productsWithFavorites =
+                products.map { it.copy(isFavorite = productsRepository.isFavorite(it.id)) }
+            emit(ResultOf.Success(productsWithFavorites))
         } catch (e: IOException) {
-            emit(ResultOf.Failure("Couldn't get products"))
+            emit(ResultOf.Failure("Couldn't get data"))
         }
     }
 }

@@ -25,7 +25,6 @@ class ProductsRepositoryImpl @Inject constructor(
     override suspend fun isFavorite(productId: String): Boolean =
         productsDao.isFavorite(productId)
 
-
     override suspend fun saveToFavoriteProducts(product: Product) {
         productsDao.insertProduct(product.toProductEntity())
     }

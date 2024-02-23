@@ -3,7 +3,7 @@ package com.parg3v.domain.module
 import com.parg3v.domain.repository.ProductsRepository
 import com.parg3v.domain.use_cases.ContainsTagUseCase
 import com.parg3v.domain.use_cases.DeleteFromFavoritesUseCase
-import com.parg3v.domain.use_cases.IsFavoriteProductUseCase
+import com.parg3v.domain.use_cases.ProductsListWithFavoritesUseCase
 import com.parg3v.domain.use_cases.GetFavoriteProductsUseCase
 import com.parg3v.domain.use_cases.GetProductByIdUseCase
 import com.parg3v.domain.use_cases.GetProductsUseCase
@@ -91,7 +91,7 @@ object ProductsModule {
 
     @Provides
     @Singleton
-    fun provideIsFavoriteProductUseCase(productsRepository: ProductsRepository): IsFavoriteProductUseCase {
-        return IsFavoriteProductUseCase(productsRepository)
+    fun provideProductsListWithFavoritesUseCase(productsRepository: ProductsRepository): ProductsListWithFavoritesUseCase {
+        return ProductsListWithFavoritesUseCase(productsRepository)
     }
 }

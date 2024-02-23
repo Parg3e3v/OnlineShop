@@ -132,19 +132,21 @@ fun Navigation(
                 }
             }
 
+            val itemsListState by catalogViewModel.productsState.collectAsStateWithLifecycle()
             val selectedOption by catalogViewModel.selectedOption.collectAsStateWithLifecycle()
             val filteredItemsList by catalogViewModel.filteredProductsState.collectAsStateWithLifecycle()
 
             CatalogScreen(
                 controller = navController,
-                itemsListStateFlow = catalogViewModel.productsState,
+                itemsListState = itemsListState,
                 sortingMethod = catalogViewModel::sortBy,
                 containsTag = catalogViewModel::containsTag,
                 selectedOption = selectedOption,
                 filteredItemsListState = filteredItemsList,
                 sortingType = sortingType,
                 addToFavourites = catalogViewModel::addToFavorites,
-                removeFromFavourites = catalogViewModel::deleteFromFavorites
+                removeFromFavourites = catalogViewModel::deleteFromFavorites,
+                matchProductsWithLocalData = catalogViewModel::matchProductsListWithLocalData
             )
         }
         composable(route = Screen.CartScreen.route,

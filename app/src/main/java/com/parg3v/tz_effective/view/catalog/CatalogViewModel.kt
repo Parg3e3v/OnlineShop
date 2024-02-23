@@ -6,8 +6,8 @@ import com.parg3v.domain.common.ResultOf
 import com.parg3v.domain.model.Product
 import com.parg3v.domain.use_cases.ContainsTagUseCase
 import com.parg3v.domain.use_cases.DeleteFromFavoritesUseCase
-import com.parg3v.domain.use_cases.IsFavoriteProductUseCase
 import com.parg3v.domain.use_cases.GetProductsUseCase
+import com.parg3v.domain.use_cases.ProductsListWithFavoritesUseCase
 import com.parg3v.domain.use_cases.SaveToFavoritesUseCase
 import com.parg3v.domain.use_cases.SortProductsByPopularityUseCase
 import com.parg3v.domain.use_cases.SortProductsByPriceToMaxUseCase
@@ -15,13 +15,14 @@ import com.parg3v.domain.use_cases.SortProductsByPriceToMinUseCase
 import com.parg3v.tz_effective.model.ProductsListState
 import com.parg3v.tz_effective.model.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +34,7 @@ class CatalogViewModel @Inject constructor(
     private val containsTagUseCase: ContainsTagUseCase,
     private val saveToFavoritesUseCase: SaveToFavoritesUseCase,
     private val deleteFromFavoritesUseCase: DeleteFromFavoritesUseCase,
-    private val isFavoriteProductUseCase: IsFavoriteProductUseCase
+    private val productsListWithFavoritesUseCase: ProductsListWithFavoritesUseCase
 ) : ViewModel() {
 
     private val _productsState = MutableStateFlow(ProductsListState())
@@ -50,8 +51,7 @@ class CatalogViewModel @Inject constructor(
         getProductsUseCase().onEach { result ->
             when (result) {
                 is ResultOf.Success<*> -> {
-                    _productsState.value =
-                        ProductsListState(data = updateFavoriteProducts(result.data.orEmpty()))
+                    _productsState.value = ProductsListState(data = result.data.orEmpty())
                 }
 
                 is ResultOf.Failure -> {
@@ -68,62 +68,112 @@ class CatalogViewModel @Inject constructor(
     }
 
     fun sortBy(field: SortType) {
+        viewModelScope.launch {
+            if (_selectedOption.value == "all") {
+                _productsState.value = when (field) {
+                    SortType.POPULARITY -> {
+                        ProductsListState(data = sortProductsByPopularityUseCase(_productsState.value.data))
+                    }
 
-        if (_selectedOption.value == "all") {
-            _productsState.value = when (field) {
-                SortType.POPULARITY -> {
-                    ProductsListState(data = sortProductsByPopularityUseCase(_productsState.value.data))
-                }
+                    SortType.PRICE_TO_MAX -> {
+                        ProductsListState(data = sortProductsByPriceToMaxUseCase(_productsState.value.data))
+                    }
 
-                SortType.PRICE_TO_MAX -> {
-                    ProductsListState(data = sortProductsByPriceToMaxUseCase(_productsState.value.data))
+                    SortType.PRICE_TO_MIN -> {
+                        ProductsListState(data = sortProductsByPriceToMinUseCase(_productsState.value.data))
+                    }
                 }
+            } else {
+                _filteredProductsState.value = when (field) {
+                    SortType.POPULARITY -> {
+                        ProductsListState(
+                            data = sortProductsByPopularityUseCase(
+                                _filteredProductsState.value.data
+                            )
+                        )
+                    }
 
-                SortType.PRICE_TO_MIN -> {
-                    ProductsListState(data = sortProductsByPriceToMinUseCase(_productsState.value.data))
-                }
-            }
-        } else {
-            _filteredProductsState.value = when (field) {
-                SortType.POPULARITY -> {
-                    ProductsListState(data = sortProductsByPopularityUseCase(_filteredProductsState.value.data))
-                }
+                    SortType.PRICE_TO_MAX -> {
+                        ProductsListState(
+                            data = sortProductsByPriceToMaxUseCase(
+                                _filteredProductsState.value.data
+                            )
+                        )
+                    }
 
-                SortType.PRICE_TO_MAX -> {
-                    ProductsListState(data = sortProductsByPriceToMaxUseCase(_filteredProductsState.value.data))
-                }
-
-                SortType.PRICE_TO_MIN -> {
-                    ProductsListState(data = sortProductsByPriceToMinUseCase(_filteredProductsState.value.data))
+                    SortType.PRICE_TO_MIN -> {
+                        ProductsListState(
+                            data = sortProductsByPriceToMinUseCase(
+                                _filteredProductsState.value.data
+                            )
+                        )
+                    }
                 }
             }
         }
     }
 
     fun containsTag(tag: String) {
-        _filteredProductsState.value =
-            ProductsListState(data = containsTagUseCase(_productsState.value.data, tag))
-        _selectedOption.value = tag
+        viewModelScope.launch {
+            _filteredProductsState.value =
+                ProductsListState(data = containsTagUseCase(_productsState.value.data, tag))
+            _selectedOption.value = tag
+        }
     }
 
     fun addToFavorites(product: Product) {
         viewModelScope.launch {
             saveToFavoritesUseCase(product)
-            _productsState.value =
-                ProductsListState(data = updateFavoriteProducts(_productsState.value.data))
+
+            withContext(Dispatchers.Main) {
+                matchProductsListWithLocalData()
+            }
         }
     }
 
     fun deleteFromFavorites(product: Product) {
         viewModelScope.launch {
             deleteFromFavoritesUseCase(product)
-            _productsState.update { ProductsListState(data = updateFavoriteProducts(it.data)) }
+
+            withContext(Dispatchers.Main) {
+                matchProductsListWithLocalData()
+            }
         }
     }
 
-    private suspend fun updateFavoriteProducts(products: List<Product>): List<Product> {
-        return products.onEach { product ->
-            product.isFavorite = isFavoriteProductUseCase(product.id)
+    fun matchProductsListWithLocalData() {
+        if (_selectedOption.value == "all") {
+            productsListWithFavoritesUseCase(_productsState.value.data).onEach { result ->
+                when (result) {
+                    is ResultOf.Failure -> {
+                        _productsState.value = ProductsListState(
+                            error = result.message ?: "Unexpected Error"
+                        )
+                    }
+
+                    is ResultOf.Loading -> {}
+
+                    is ResultOf.Success<*> -> {
+                        _productsState.value = ProductsListState(data = result.data.orEmpty())
+                    }
+                }
+            }.launchIn(viewModelScope)
+        } else {
+            productsListWithFavoritesUseCase(_filteredProductsState.value.data).onEach { result ->
+                when (result) {
+                    is ResultOf.Failure -> {
+                        _filteredProductsState.value = ProductsListState(
+                            error = result.message ?: "Unexpected Error"
+                        )
+                    }
+
+                    is ResultOf.Loading -> {}
+
+                    is ResultOf.Success<*> -> {
+                        _filteredProductsState.value = ProductsListState(data = result.data.orEmpty())
+                    }
+                }
+            }.launchIn(viewModelScope)
         }
     }
 }

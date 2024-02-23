@@ -1,5 +1,6 @@
 package com.parg3v.tz_effective.view.catalog
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,13 +17,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.parg3v.domain.model.Product
 import com.parg3v.tz_effective.R
@@ -36,23 +35,24 @@ import com.parg3v.tz_effective.model.ProductsListState
 import com.parg3v.tz_effective.model.SortType
 import com.parg3v.tz_effective.navigation.Screen
 import com.parg3v.tz_effective.ui.theme.Typography
-import kotlinx.coroutines.flow.StateFlow
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatalogScreen(
     controller: NavController,
-    itemsListStateFlow: StateFlow<ProductsListState>,
+    itemsListState: ProductsListState,
     sortingMethod: (SortType) -> Unit,
     containsTag: (String) -> Unit,
     selectedOption: String,
     filteredItemsListState: ProductsListState,
     sortingType: MutableState<Int>,
     addToFavourites: (Product) -> Unit,
-    removeFromFavourites: (Product) -> Unit
+    removeFromFavourites: (Product) -> Unit,
+    matchProductsWithLocalData: () -> Unit
 ) {
     val listState = rememberLazyGridState()
-    val itemsListState by itemsListStateFlow.collectAsStateWithLifecycle()
+
 
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -93,6 +93,7 @@ fun CatalogScreen(
                         )
                     }
                 } else {
+                    matchProductsWithLocalData()
                     LazyVerticalGrid(
                         state = listState,
                         columns = GridCells.Fixed(2),
