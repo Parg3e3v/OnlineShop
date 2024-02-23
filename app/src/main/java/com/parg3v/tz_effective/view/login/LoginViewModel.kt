@@ -91,6 +91,9 @@ class LoginViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+        _nameState.value = ""
+        _surnameState.value = ""
+        _phoneState.value = ""
     }
 
     suspend fun getLoginInfo(context: Context){
