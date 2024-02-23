@@ -24,16 +24,23 @@
 
 ## Скриншоты
 
-![App Screenshot](https://i.imgur.com/GUjvDm0.png)
+### Вход 1
+<img src="https://i.imgur.com/GUjvDm0.png" width="48">
 
-![App Screenshot](https://i.imgur.com/VkekIBU.png)
+### Вход 2
+<img src="https://i.imgur.com/VkekIBU.png" width="48">
 
-![App Screenshot](https://i.imgur.com/EIauSgQ.png)
+### Вход 3
+<img src="https://i.imgur.com/EIauSgQ.png" width="48">
 
-![App Screenshot](https://i.imgur.com/yrcIg7x.png)
+### Каталог
+<img src="https://i.imgur.com/yrcIg7x.png" width="48">
 
-![App Screenshot](https://i.imgur.com/fPJBD6o.png)
+### Каталог 2
+<img src="https://i.imgur.com/1nmzaW1.png" width="48">
 
-![App Screenshot](https://i.imgur.com/mFWnqK2.png)
+### Избранное
+<img src="https://i.imgur.com/ZYxGFSk.png" width="48">
 
-![App Screenshot](https://i.imgur.com/1nmzaW1.png)
+### Личный кабинет
+<img src="https://i.imgur.com/mFWnqK2.png" width="48">
