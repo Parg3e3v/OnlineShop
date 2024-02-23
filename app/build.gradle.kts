@@ -85,11 +85,6 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.50")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0-rc01")
 
-    // Retrofit
-    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.3")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
     // Navigation Animation
     implementation("com.google.accompanist:accompanist-navigation-animation:0.25.0")
 

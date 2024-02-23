@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
@@ -34,9 +35,7 @@ import com.parg3v.tz_effective.ui.theme.Tz_effectiveTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhoneNumberTextField(
-    valueProvider: () -> String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    valueProvider: () -> String, onValueChange: (String) -> Unit, modifier: Modifier = Modifier
 ) {
     var isFocused by remember { mutableStateOf(false) }
     val placeholder: String = if (isFocused) {
@@ -52,8 +51,7 @@ fun PhoneNumberTextField(
             },
         ) {
             Icon(
-                painterResource(id = R.drawable.icon_clear),
-                contentDescription = ""
+                painterResource(id = R.drawable.icon_clear), contentDescription = ""
             )
         }
     }
@@ -68,9 +66,7 @@ fun PhoneNumberTextField(
         shape = RoundedCornerShape(percent = integerResource(id = R.integer.ui_round_percentage)),
         placeholder = { Text(placeholder) },
         visualTransformation = {
-            if (it.isBlank() && isFocused) {
-                phoneNumberInputFormatter(it)
-            } else if (it.isBlank()) {
+            if (it.isBlank()) {
                 TransformedText(it, OffsetMapping.Identity)
             } else {
                 phoneNumberInputFormatter(it)
@@ -92,7 +88,7 @@ private fun phoneNumberInputFormatter(text: AnnotatedString): TransformedText {
 
     val trimmed = if (text.text.length >= 10) text.text.substring(0..9) else text.text
 
-    val annotatedString = AnnotatedString.Builder().run {
+    val annotatedString = buildAnnotatedString {
         append("+7 ")
         for (i in trimmed.indices) {
             append(trimmed[i])
