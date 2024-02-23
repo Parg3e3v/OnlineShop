@@ -351,7 +351,8 @@ fun ProductScreen(
                 onClick = { },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .aspectRatio(6.7F),
                 colors = ButtonDefaults.buttonColors(containerColor = PinkDark),
             ) {
                 Text(
@@ -364,7 +365,7 @@ fun ProductScreen(
                     color = PinkLight
                 )
                 Spacer(modifier = Modifier.weight(1F))
-                Text(text = "Добавить корзину", style = Typography.titleMedium)
+                Text(text = stringResource(R.string.add_to_cart), style = Typography.titleMedium)
             }
         }
     } ?: run {

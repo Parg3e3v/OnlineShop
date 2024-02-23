@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -59,7 +60,8 @@ fun AccountScreen(
             icon = painterResource(id = R.drawable.icon_favorite_outlined),
             iconTint = PinkDark,
             title = stringResource(R.string.favorites),
-            content = "$count товар"
+
+            content = pluralStringResource(id = R.plurals.favorite_count, count = count, count)
         ) {
             navController.navigate(Screen.FavoritesScreen.route)
         }
