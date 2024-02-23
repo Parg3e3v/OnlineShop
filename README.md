@@ -24,7 +24,7 @@
 
 ## Скриншоты
 
-![App Screenshot](https://i.imgur.com/GUjvDm0.png =250x250)
+![App Screenshot](https://i.imgur.com/GUjvDm0.png)
 
 ![App Screenshot](https://i.imgur.com/VkekIBU.png)
 
