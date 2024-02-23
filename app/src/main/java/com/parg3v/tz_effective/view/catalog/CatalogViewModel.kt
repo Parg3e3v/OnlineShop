@@ -52,6 +52,7 @@ class CatalogViewModel @Inject constructor(
             when (result) {
                 is ResultOf.Success<*> -> {
                     _productsState.value = ProductsListState(data = result.data.orEmpty())
+                    sortBy(SortType.POPULARITY)
                 }
 
                 is ResultOf.Failure -> {

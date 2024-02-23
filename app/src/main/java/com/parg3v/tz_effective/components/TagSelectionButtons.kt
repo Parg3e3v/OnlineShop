@@ -63,7 +63,7 @@ fun TagSelectionButtons(
                             if (clickable) {
                                 filter(
                                     onClick = onClick,
-                                    tag = tag,
+                                    tag = Config.TAGS["all"]!!,
                                     sortingType = sortingType,
                                     sortingMethod = sortingMethod,
                                     listState = listState,

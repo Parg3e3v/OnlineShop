@@ -54,6 +54,7 @@ import com.parg3v.tz_effective.R
 import com.parg3v.tz_effective.components.CustomStrikeTextView
 import com.parg3v.tz_effective.components.ImageCarousel
 import com.parg3v.tz_effective.components.RatingBar
+import com.parg3v.tz_effective.components.modifyFavorite
 import com.parg3v.tz_effective.config.Config
 import com.parg3v.tz_effective.model.ProductState
 import com.parg3v.tz_effective.ui.theme.DarkGrey
@@ -66,7 +67,11 @@ import com.parg3v.tz_effective.ui.theme.Tz_effectiveTheme
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ProductScreen(productState: ProductState) {
+fun ProductScreen(
+    productState: ProductState,
+    addToFavorites: (Product) -> Unit,
+    removeFromFavorites: (Product) -> Unit
+) {
 
     val pagerState = rememberPagerState(initialPage = 0)
     val scrollState = rememberScrollState()
@@ -106,10 +111,18 @@ fun ProductScreen(productState: ProductState) {
                     )
 
                     IconButton(
-                        onClick = { /*TODO*/ }, modifier = Modifier.align(Alignment.TopEnd)
+                        onClick = {
+                            modifyFavorite(
+                                favorite = product.isFavorite,
+                                product = product,
+                                removeFromFavorites = removeFromFavorites,
+                                addToFavorites = addToFavorites
+                            )
+                        },
+                        modifier = Modifier.align(Alignment.TopEnd)
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.icon_favorite_outlined),
+                            painter = painterResource(id = if (product.isFavorite) R.drawable.icon_favorite else R.drawable.icon_favorite_outlined),
                             tint = PinkDark,
                             contentDescription = null
                         )
@@ -379,9 +392,11 @@ fun ProductScreenPreview() {
                     available = 20,
                     description = "Лосьон для тела `ESFOLIO` COENZYME Q10 Увлажняющий содержит " + "минеральную воду и соду, способствует глубокому очищению пор от " + "различных загрязнений, контроллирует работу сальных желез, сужает " + "поры. Обладает мягким антиептическим действием, не пересушивает кожу." + " Минеральная вода тонизирует и смягчает кожу.",
                     info = listOf(Info("", "")),
-                    ingredients = ""
+                    ingredients = "",
                 )
-            )
+            ),
+            addToFavorites = {},
+            removeFromFavorites = {}
         )
     }
 }

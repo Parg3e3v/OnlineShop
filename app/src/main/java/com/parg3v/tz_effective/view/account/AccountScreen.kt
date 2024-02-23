@@ -39,7 +39,8 @@ import kotlinx.coroutines.launch
 fun AccountScreen(
     navController: NavController,
     loginInfo: LoginInfo,
-    clearData: suspend (Context) -> Unit
+    clearData: suspend (Context) -> Unit,
+    count: Int
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -58,7 +59,7 @@ fun AccountScreen(
             icon = painterResource(id = R.drawable.icon_favorite_outlined),
             iconTint = PinkDark,
             title = stringResource(R.string.favorites),
-            content = "1 товар" // TODO: Show favorite products count
+            content = "$count товар"
         ) {
             navController.navigate(Screen.FavoritesScreen.route)
         }

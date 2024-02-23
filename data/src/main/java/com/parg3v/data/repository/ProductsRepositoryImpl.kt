@@ -22,6 +22,9 @@ class ProductsRepositoryImpl @Inject constructor(
     override suspend fun getFavoriteProducts(): List<Product> =
         productsDao.getProducts().map { it.toProduct() }
 
+    override suspend fun getFavoriteProductsCount(): Int =
+        productsDao.getProductsCount()
+
     override suspend fun isFavorite(productId: String): Boolean =
         productsDao.isFavorite(productId)
 

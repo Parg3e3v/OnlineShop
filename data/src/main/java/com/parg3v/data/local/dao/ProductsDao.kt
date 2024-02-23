@@ -11,6 +11,8 @@ import com.parg3v.data.local.entity.ProductEntity
 interface ProductsDao {
     @Query("SELECT * FROM product_table")
     suspend fun getProducts(): List<ProductEntity>
+    @Query("SELECT COUNT(*) FROM product_table")
+    suspend fun getProductsCount(): Int
 
     @Query("SELECT COUNT(*) FROM product_table WHERE id = :productId")
     suspend fun isFavorite(productId: String): Boolean

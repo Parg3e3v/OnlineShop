@@ -162,10 +162,16 @@ fun Navigation(
         composable(route = Screen.AccountScreen.route,
             exitTransition = { slideOut },
             popEnterTransition = { slideIn }) {
+
+            val count by accountViewModel.productsCount.collectAsStateWithLifecycle()
+            LaunchedEffect(accountViewModel) {
+                accountViewModel.getFavoriteProductsCount()
+            }
             AccountScreen(
                 navController = navController,
                 loginInfo = loginInfo.data ?: LoginInfo(),
-                accountViewModel::deleteLoginInfo
+                clearData = accountViewModel::deleteLoginInfo,
+                count = count
             )
         }
         composable(route = Screen.FavoritesScreen.route,
@@ -203,7 +209,11 @@ fun Navigation(
                 LaunchedEffect(productId) {
                     productViewModel.getProductById(productId)
                 }
-                ProductScreen(productState = productState)
+                ProductScreen(
+                    productState = productState,
+                    addToFavorites = productViewModel::addToFavorites,
+                    removeFromFavorites = productViewModel::deleteFromFavorites
+                )
             }
         }
     }
