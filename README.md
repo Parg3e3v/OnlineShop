@@ -1,4 +1,4 @@
-# Online Store App
+# Online Shop
 
 ## Tech Stack
 - **Kotlin**
